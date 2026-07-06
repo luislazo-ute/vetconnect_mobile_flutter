@@ -68,7 +68,10 @@ class PantallaHome extends StatelessWidget {
                 Text('Servicios',
                     style: textos.titleMedium
                         ?.copyWith(fontWeight: FontWeight.bold)),
-                TextButton(onPressed: () {}, child: const Text('Ver más')),
+                TextButton(
+                  onPressed: () => context.pushNamed('servicios'),
+                  child: const Text('Ver más'),
+                ),
               ],
             ),
             // Relleno temporal (hasta conectar la API).
