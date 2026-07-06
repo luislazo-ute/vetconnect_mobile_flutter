@@ -1,7 +1,7 @@
 import 'package:go_router/go_router.dart';
 
-import '../main.dart'; // para usar PantallaInicio (temporal; luego moveremos las pantallas)
-
+import '../ui/screens/publicas/pantalla_bienvenida.dart';
+import '../ui/screens/publicas/pantalla_home.dart';
 
 /// Configuración central de navegación (como el urls.py de Django).
 final GoRouter routerApp = GoRouter(
@@ -9,9 +9,13 @@ final GoRouter routerApp = GoRouter(
   routes: [
     GoRoute(
       path: '/',
-      name: 'inicio',
-      // El builder devuelve LA PANTALLA que se dibuja en esta ruta.
-      builder: (context, state) => const PantallaInicio(),
+      name: 'bienvenida',
+      builder: (context, state) => const PantallaBienvenida(),
+    ),
+    GoRoute(
+      path: '/home',
+      name: 'home',
+      builder: (context, state) => const PantallaHome(),
     ),
     // Aquí irán más rutas en los próximos módulos.
   ],
