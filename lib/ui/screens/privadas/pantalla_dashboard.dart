@@ -5,6 +5,7 @@ import '../../../core/bottom_nav.dart';
 import '../../../core/tema.dart';
 import '../../../domain/entities/rol.dart';
 import '../../notifiers/auth_notifier.dart';
+import 'pantalla_citas.dart';
 import 'pantalla_mascotas.dart';
 
 /// Dashboard privado con bottom nav flotante y contenido según el rol.
@@ -22,6 +23,7 @@ class _PantallaDashboardState extends ConsumerState<PantallaDashboard> {
   static const _paginas = [
     _TabInicio(),
     PantallaMascotas(),
+    PantallaCitas(),
     _TabPerfil(),
   ];
 
@@ -42,6 +44,7 @@ class _PantallaDashboardState extends ConsumerState<PantallaDashboard> {
                 items: const [
                   ItemNav(icono: Icons.home_outlined, etiqueta: 'Inicio'),
                   ItemNav(icono: Icons.pets_outlined, etiqueta: 'Pacientes'),
+                  ItemNav(icono: Icons.event_outlined, etiqueta: 'Citas'),
                   ItemNav(icono: Icons.person_outline, etiqueta: 'Perfil'),
                 ],
               ),
