@@ -90,7 +90,10 @@ class PantallaHome extends StatelessWidget {
                 Text('Nuestro equipo',
                     style: textos.titleMedium
                         ?.copyWith(fontWeight: FontWeight.bold)),
-                TextButton(onPressed: () {}, child: const Text('Ver más')),
+                TextButton(
+                  onPressed: () => context.pushNamed('equipo'),
+                  child: const Text('Ver más'),
+                ),
               ],
             ),
             const Card(
