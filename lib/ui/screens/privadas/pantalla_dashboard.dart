@@ -6,6 +6,7 @@ import '../../../core/tema.dart';
 import '../../../domain/entities/rol.dart';
 import '../../notifiers/auth_notifier.dart';
 import 'pantalla_citas.dart';
+import 'pantalla_galeria.dart';
 import 'pantalla_mascotas.dart';
 
 /// Dashboard privado con bottom nav flotante y contenido según el rol.
@@ -87,6 +88,19 @@ class _TabInicio extends ConsumerWidget {
                   const SizedBox(width: 12),
                   Expanded(child: Text(_descripcionRol(usuario?.rol))),
                 ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Acceso a la galería MongoDB.
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.photo_library_outlined,
+                  color: TemaApp.verdeBosque),
+              title: const Text('Galería de mascotas'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaGaleria()),
               ),
             ),
           ),
