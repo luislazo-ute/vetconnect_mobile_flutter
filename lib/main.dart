@@ -7,22 +7,22 @@ import 'core/rutas.dart';
 /// Punto de entrada de la app (como el if __name__ == '__main__' de Python).
 void main() {
   // ProviderScope guarda el estado de todos los providers de Riverpod.
-  // Debe envolver toda la app.
   runApp(const ProviderScope(child: VetConnectApp()));
 }
 
-/// Widget raíz: envuelve toda la aplicación.
-/// Es StatelessWidget porque por sí mismo no cambia de estado.
-class VetConnectApp extends StatelessWidget {
+/// Widget raíz. Es ConsumerWidget para poder leer el routerProvider (que
+/// depende de la sesión).
+class VetConnectApp extends ConsumerWidget {
   const VetConnectApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
     return MaterialApp.router(
       title: 'VetConnect',
       debugShowCheckedModeBanner: false,
       theme: TemaApp.tema,
-      routerConfig: routerApp,
+      routerConfig: router,
     );
   }
 }

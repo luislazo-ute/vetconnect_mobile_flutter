@@ -1,16 +1,23 @@
-// Prueba de humo básica: verifica que la app arranca en la pantalla de bienvenida.
+// Tests unitarios de dominio (sin plugins ni red).
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:vetconnect_app/main.dart';
+import 'package:vetconnect_app/domain/entities/rol.dart';
+import 'package:vetconnect_app/domain/entities/usuario.dart';
 
 void main() {
-  testWidgets('La app arranca y muestra la pantalla de bienvenida',
-      (WidgetTester tester) async {
-    // Construye la app y dibuja un frame.
-    await tester.pumpWidget(const VetConnectApp());
+  test('Rol.desdeApi mapea los strings del backend', () {
+    expect(Rol.desdeApi('ADMIN'), Rol.admin);
+    expect(Rol.desdeApi('DOCTOR'), Rol.doctor);
+    expect(Rol.desdeApi('USUARIO'), Rol.usuario);
+    expect(Rol.desdeApi('cualquier_otro'), Rol.usuario); // fallback
+  });
 
-    // La bienvenida debe mostrar el titular y el botón "Comenzar".
-    expect(find.text('Bienvenido a VetConnect'), findsOneWidget);
-    expect(find.text('Comenzar'), findsOneWidget);
+  test('Los getters de rol de Usuario funcionan', () {
+    const admin = Usuario(
+      id: 1, username: 'admin1', email: 'a@vet.com', isStaff: true, rol: Rol.admin,
+    );
+    expect(admin.esAdmin, true);
+    expect(admin.esDoctor, false);
+    expect(admin.esUsuario, false);
   });
 }

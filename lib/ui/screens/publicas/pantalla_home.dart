@@ -30,11 +30,20 @@ class PantallaHome extends StatelessWidget {
                             ?.copyWith(fontWeight: FontWeight.bold)),
                   ],
                 ),
-                IconButton(
-                  // Temporal: la campana abre Contacto (luego será notificaciones).
-                  // push = apila la pantalla y deja volver con la flecha atrás.
-                  onPressed: () => context.pushNamed('contacto'),
-                  icon: const Icon(Icons.notifications_outlined),
+                Row(
+                  children: [
+                    // Acceso a la zona privada (login).
+                    IconButton(
+                      tooltip: 'Iniciar sesión',
+                      onPressed: () => context.pushNamed('login'),
+                      icon: const Icon(Icons.person_outline),
+                    ),
+                    IconButton(
+                      // Temporal: la campana abre Contacto (luego notificaciones).
+                      onPressed: () => context.pushNamed('contacto'),
+                      icon: const Icon(Icons.notifications_outlined),
+                    ),
+                  ],
                 ),
               ],
             ),
