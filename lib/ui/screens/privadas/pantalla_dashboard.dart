@@ -7,10 +7,12 @@ import '../../../core/tema.dart';
 import '../../../domain/entities/rol.dart';
 import '../../notifiers/auth_notifier.dart';
 import 'pantalla_citas.dart';
+import 'pantalla_clientes_admin.dart';
 import 'pantalla_coleccion_mongo.dart';
 import 'pantalla_galeria.dart';
 import 'pantalla_historiales.dart';
 import 'pantalla_mascotas.dart';
+import 'pantalla_veterinarios_admin.dart';
 
 /// Dashboard privado con bottom nav flotante y contenido según el rol.
 class PantallaDashboard extends ConsumerStatefulWidget {
@@ -132,6 +134,34 @@ class _TabInicio extends ConsumerWidget {
                       builder: (_) => PantallaColeccionMongo(config: col))),
                 ),
               )),
+
+          // Gestión administrativa: solo ADMIN.
+          if (usuario?.rol == Rol.admin) ...[
+            const SizedBox(height: 20),
+            Text('Gestión (admin)',
+                style: textos.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            Card(
+              child: ListTile(
+                leading: const Icon(Icons.medical_information_outlined,
+                    color: TemaApp.verdeBosque),
+                title: const Text('Veterinarios'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const PantallaVeterinariosAdmin())),
+              ),
+            ),
+            Card(
+              child: ListTile(
+                leading: const Icon(Icons.groups_outlined,
+                    color: TemaApp.verdeBosque),
+                title: const Text('Clientes'),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const PantallaClientesAdmin())),
+              ),
+            ),
+          ],
         ],
       ),
     );

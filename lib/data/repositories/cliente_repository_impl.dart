@@ -15,12 +15,13 @@ class ClienteRepositoryImpl implements IClienteRepository {
 
   ClienteRepositoryImpl(this._cliente);
 
+  static const _headers = {'Content-Type': 'application/json'};
+
   @override
-  Future<List<Cliente>> obtenerClientes() async {
-    // page_size alto para traer todos de una (para el dropdown).
+  Future<List<Cliente>> obtenerClientes() {
     final uri = Uri.parse('${Constantes.urlBase}clientes/')
         .replace(queryParameters: {'page_size': '100'});
-    try {
+    return _envolver(() async {
       final r = await _cliente.get(uri).timeout(Constantes.timeout);
       if (r.statusCode == 200) {
         final json = jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
@@ -30,6 +31,32 @@ class ClienteRepositoryImpl implements IClienteRepository {
             .toList();
       }
       throw ExcepcionApi('Error del servidor (${r.statusCode}).');
+    });
+  }
+
+  @override
+  Future<void> actualizarCliente(int id, Map<String, dynamic> datos) {
+    final uri = Uri.parse('${Constantes.urlBase}clientes/$id/');
+    return _envolver(() async {
+      final r = await _cliente
+          .patch(uri, headers: _headers, body: jsonEncode(datos))
+          .timeout(Constantes.timeout);
+      if (r.statusCode != 200) throw ExcepcionApi(_msg(r));
+    });
+  }
+
+  @override
+  Future<void> eliminarCliente(int id) {
+    final uri = Uri.parse('${Constantes.urlBase}clientes/$id/');
+    return _envolver(() async {
+      final r = await _cliente.delete(uri).timeout(Constantes.timeout);
+      if (r.statusCode != 204) throw ExcepcionApi(_msg(r));
+    });
+  }
+
+  Future<T> _envolver<T>(Future<T> Function() op) async {
+    try {
+      return await op();
     } on SocketException {
       throw const ExcepcionApi('Sin conexión a internet.');
     } on TimeoutException {
@@ -37,5 +64,11 @@ class ClienteRepositoryImpl implements IClienteRepository {
     } on FormatException {
       throw const ExcepcionApi('Respuesta inválida del servidor.');
     }
+  }
+
+  String _msg(http.Response r) {
+    if (r.statusCode == 403) return 'No tienes permiso para esta acción.';
+    if (r.statusCode == 400) return 'Datos inválidos.';
+    return 'Error del servidor (${r.statusCode}).';
   }
 }
