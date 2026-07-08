@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/bottom_nav.dart';
+import '../../../core/colecciones_mongo.dart';
 import '../../../core/tema.dart';
 import '../../../domain/entities/rol.dart';
 import '../../notifiers/auth_notifier.dart';
 import 'pantalla_citas.dart';
+import 'pantalla_coleccion_mongo.dart';
 import 'pantalla_galeria.dart';
+import 'pantalla_historiales.dart';
 import 'pantalla_mascotas.dart';
 
 /// Dashboard privado con bottom nav flotante y contenido según el rol.
@@ -104,6 +107,31 @@ class _TabInicio extends ConsumerWidget {
               ),
             ),
           ),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.description_outlined,
+                  color: TemaApp.verdeBosque),
+              title: const Text('Historiales médicos'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaHistoriales()),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text('Datos clínicos (MongoDB)',
+              style: textos.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          // Las 4 colecciones Mongo, reutilizando la misma pantalla genérica.
+          ...coleccionesMongo.map((col) => Card(
+                child: ListTile(
+                  leading: Icon(col.icono, color: TemaApp.verdeBosque),
+                  title: Text(col.titulo),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => PantallaColeccionMongo(config: col))),
+                ),
+              )),
         ],
       ),
     );
