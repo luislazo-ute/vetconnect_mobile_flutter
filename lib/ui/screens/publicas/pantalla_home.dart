@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/fondo_huellas.dart';
 import '../../../core/tema.dart';
 
 class PantallaHome extends StatelessWidget {
@@ -26,7 +28,7 @@ class PantallaHome extends StatelessWidget {
                       style: textos.bodyMedium?.copyWith(color: Colors.grey),
                     ),
                     Text(
-                      'VetConnect',
+                      'VetConnect 🐾',
                       style: textos.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -35,92 +37,133 @@ class PantallaHome extends StatelessWidget {
                 ),
                 Row(
                   children: [
-                    IconButton(
-                      tooltip: 'Iniciar sesión',
-                      onPressed: () => context.pushNamed('login'),
-                      icon: const Icon(Icons.person_outline),
+                    _iconoCircular(
+                      Icons.person_outline,
+                      () => context.pushNamed('login'),
                     ),
-                    IconButton(
-                      onPressed: () => context.pushNamed('contacto'),
-                      icon: const Icon(Icons.notifications_outlined),
+                    const SizedBox(width: 8),
+                    _iconoCircular(
+                      Icons.mail_outline,
+                      () => context.pushNamed('contacto'),
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
 
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                color: TemaApp.verdeBosque,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(24),
+              child: Stack(
                 children: [
-                  Text(
-                    'Cuidamos a tu mascota 🐾',
-                    style: textos.titleLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Positioned.fill(
+                    child: CustomPaint(painter: FondoHuellas(opacidad: 0.08)),
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Servicios veterinarios de confianza para tu mejor amigo.',
-                    style: textos.bodyMedium?.copyWith(color: Colors.white70),
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: const BoxDecoration(color: TemaApp.verdeBosque),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Cuidamos a tu\nmascota',
+                          style: textos.headlineSmall?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            height: 1.2,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Servicios veterinarios de confianza.',
+                          style: textos.bodyMedium?.copyWith(
+                            color: Colors.white.withValues(alpha: 0.8),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        FilledButton(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: TemaApp.verdeBosque,
+                          ),
+                          onPressed: () => context.pushNamed('servicios'),
+                          child: const Text(
+                            'Ver servicios',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-            const SizedBox(height: 28),
+            ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1, end: 0),
+            const SizedBox(height: 24),
 
+            Text(
+              'Explora',
+              style: textos.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Servicios',
-                  style: textos.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () => context.pushNamed('servicios'),
-                  child: const Text('Ver más'),
-                ),
+                _acceso(context, Icons.medical_services_outlined, 'Servicios',
+                    'servicios'),
+                const SizedBox(width: 12),
+                _acceso(context, Icons.groups_outlined, 'Equipo', 'equipo'),
+                const SizedBox(width: 12),
+                _acceso(context, Icons.mail_outline, 'Contacto', 'contacto'),
               ],
-            ),
-            const Card(
-              child: ListTile(
-                leading: Icon(Icons.medical_services_outlined),
-                title: Text('Pronto: servicios desde la API'),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Nuestro equipo',
-                  style: textos.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+            ).animate().fadeIn(delay: 150.ms, duration: 400.ms).slideY(
+                  begin: 0.15,
+                  end: 0,
                 ),
-                TextButton(
-                  onPressed: () => context.pushNamed('equipo'),
-                  child: const Text('Ver más'),
-                ),
-              ],
-            ),
-            const Card(
-              child: ListTile(
-                leading: Icon(Icons.person_outline),
-                title: Text('Pronto: veterinarios desde la API'),
-              ),
-            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _iconoCircular(IconData icono, VoidCallback onTap) {
+    return Material(
+      color: TemaApp.verdeBosque.withValues(alpha: 0.08),
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Icon(icono, color: TemaApp.verdeBosque),
+        ),
+      ),
+    );
+  }
+
+  Widget _acceso(
+      BuildContext context, IconData icono, String label, String ruta) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => context.pushNamed(ruta),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Icon(icono, color: TemaApp.verdeBosque, size: 28),
+              const SizedBox(height: 8),
+              Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+            ],
+          ),
         ),
       ),
     );

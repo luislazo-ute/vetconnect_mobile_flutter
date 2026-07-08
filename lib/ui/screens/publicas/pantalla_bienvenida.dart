@@ -1,55 +1,105 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/fondo_huellas.dart';
 import '../../../core/tema.dart';
 
 class PantallaBienvenida extends StatelessWidget {
   const PantallaBienvenida({super.key});
 
+  static const _urlMascota =
+      'https://images.dog.ceo/breeds/samoyed/n02111889_4754.jpg';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: TemaApp.verdeBosque,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            children: [
-              const Spacer(),
-              const Icon(Icons.pets, size: 140, color: Colors.white),
-              const Spacer(),
-              Text(
-                'Bienvenido a VetConnect',
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                'El cuidado de tu mascota, en tus manos',
-                textAlign: TextAlign.center,
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Colors.white70),
-              ),
-              const SizedBox(height: 32),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: TemaApp.verdeBosque,
+      body: Stack(
+        children: [
+          Positioned.fill(child: CustomPaint(painter: FondoHuellas())),
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  const Spacer(),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(28),
+                    child: CachedNetworkImage(
+                      imageUrl: _urlMascota,
+                      height: 320,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      placeholder: (c, u) => Container(
+                        height: 320,
+                        color: Colors.white.withValues(alpha: 0.1),
+                        child: const Center(
+                          child: CircularProgressIndicator(color: Colors.white),
+                        ),
+                      ),
+                      errorWidget: (c, u, e) => Container(
+                        height: 320,
+                        color: Colors.white.withValues(alpha: 0.1),
+                        child: const Icon(Icons.pets,
+                            size: 90, color: Colors.white),
+                      ),
+                    ),
+                  ).animate().fadeIn(duration: 600.ms).scale(
+                        begin: const Offset(0.92, 0.92),
+                        end: const Offset(1, 1),
+                        curve: Curves.easeOut,
+                      ),
+                  const Spacer(),
+                  const Text(
+                    'Todo lo que tu\nmascota necesita',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      height: 1.15,
+                    ),
+                  ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.2, end: 0),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Cuidado veterinario de confianza,\nen la palma de tu mano.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      fontSize: 15,
+                    ),
+                  ).animate().fadeIn(delay: 300.ms),
+                  const SizedBox(height: 32),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: TemaApp.verdeBosque,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      onPressed: () => context.goNamed('home'),
+                      child: const Text(
+                        'Comenzar',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ).animate().fadeIn(delay: 400.ms).slideY(begin: 0.3, end: 0),
+                  const SizedBox(height: 4),
+                  TextButton(
+                    onPressed: () => context.pushNamed('login'),
+                    child: Text(
+                      'Ya tengo cuenta',
+                      style: TextStyle(color: Colors.white.withValues(alpha: 0.85)),
+                    ),
                   ),
-                  onPressed: () => context.goNamed('home'),
-                  child: const Text('Comenzar'),
-                ),
+                ],
               ),
-              const SizedBox(height: 16),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

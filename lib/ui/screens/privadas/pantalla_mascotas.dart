@@ -1,13 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
+import '../../../core/imagenes.dart';
+import '../../../core/tema.dart';
 import '../../../domain/entities/mascota.dart';
 import '../../../domain/entities/rol.dart';
 import '../../notifiers/mascotas_notifier.dart';
 import '../../notifiers/mascotas_state.dart';
 import '../../providers/mascota_providers.dart';
 import '../../providers/rol_provider.dart';
+import 'pantalla_mascota_detalle.dart';
 import 'pantalla_mascota_formulario.dart';
 
 class PantallaMascotas extends ConsumerStatefulWidget {
@@ -164,7 +168,31 @@ class _PantallaMascotasState extends ConsumerState<PantallaMascotas> {
         final m = estado.mascotas[i];
         return Card(
           child: ListTile(
-            leading: const CircleAvatar(child: Icon(Icons.pets)),
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => PantallaMascotaDetalle(mascota: m),
+              ),
+            ),
+            leading: Hero(
+              tag: 'mascota-${m.id}',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                  imageUrl: imagenPorEspecie(m.especie),
+                  width: 48,
+                  height: 48,
+                  fit: BoxFit.cover,
+                  placeholder: (c, u) => Container(
+                    width: 48,
+                    height: 48,
+                    color: TemaApp.verdeMedio.withValues(alpha: 0.2),
+                  ),
+                  errorWidget: (c, u, e) => const CircleAvatar(
+                    child: Icon(Icons.pets),
+                  ),
+                ),
+              ),
+            ),
             title: Text(m.nombre),
             subtitle: Text('${m.especieDisplay} · ${m.raza} · ${m.pesoTexto}'),
             trailing:

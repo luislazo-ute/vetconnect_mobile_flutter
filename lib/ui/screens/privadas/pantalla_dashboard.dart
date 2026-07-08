@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/bottom_nav.dart';
@@ -236,34 +237,93 @@ class _TabPerfil extends ConsumerWidget {
     final usuario = ref.watch(authNotifierProvider).usuario;
     final textos = Theme.of(context).textTheme;
 
+    final inicial =
+        (usuario?.username ?? '?').substring(0, 1).toUpperCase();
+
     return SafeArea(
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
         children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 24),
+            decoration: BoxDecoration(
+              color: TemaApp.verdeBosque,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 44,
+                  backgroundColor: Colors.white.withValues(alpha: 0.2),
+                  child: Text(
+                    inicial,
+                    style: const TextStyle(
+                      fontSize: 34,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Text(
+                  usuario?.username ?? '',
+                  style: textos.titleLarge?.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  usuario?.email ?? '',
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.85)),
+                ),
+                const SizedBox(height: 14),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    (usuario?.rol.name ?? '').toUpperCase(),
+                    style: const TextStyle(
+                      color: TemaApp.verdeBosque,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ).animate().fadeIn(duration: 400.ms).slideY(begin: -0.08, end: 0),
           const SizedBox(height: 20),
-          const Center(
-            child: CircleAvatar(
-              radius: 48,
-              backgroundColor: TemaApp.verdeMedio,
-              child: Icon(Icons.person, size: 48, color: Colors.white),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.email_outlined,
+                  color: TemaApp.verdeBosque),
+              title: const Text('Correo'),
+              subtitle: Text(usuario?.email ?? '—'),
             ),
           ),
-          const SizedBox(height: 16),
-          Center(
-            child: Text(
-              usuario?.username ?? '',
-              style: textos.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.badge_outlined,
+                  color: TemaApp.verdeBosque),
+              title: const Text('Rol'),
+              subtitle: Text(usuario?.rol.name ?? '—'),
             ),
           ),
-          Center(child: Text(usuario?.email ?? '', style: textos.bodyMedium)),
-          const SizedBox(height: 32),
-          FilledButton.icon(
-            onPressed:
-                () => ref.read(authNotifierProvider.notifier).cerrarSesion(),
-            icon: const Icon(Icons.logout),
-            label: const Text('Cerrar sesión'),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton.icon(
+              style: FilledButton.styleFrom(backgroundColor: Colors.red.shade400),
+              onPressed:
+                  () => ref.read(authNotifierProvider.notifier).cerrarSesion(),
+              icon: const Icon(Icons.logout),
+              label: const Text('Cerrar sesión'),
+            ),
           ),
         ],
       ),
