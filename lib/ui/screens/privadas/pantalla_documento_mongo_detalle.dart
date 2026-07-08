@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/entities/documento_mongo.dart';
 
-/// Detalle genérico de un documento Mongo: muestra todos sus campos.
 class PantallaDocumentoMongoDetalle extends StatelessWidget {
   final String titulo;
   final DocumentoMongo doc;
@@ -27,10 +26,9 @@ class PantallaDocumentoMongoDetalle extends StatelessWidget {
             subtitle: Text(doc.id),
           ),
           const Divider(),
-          ...entradas.map((e) => ListTile(
-                title: Text(e.key),
-                subtitle: Text('${e.value}'),
-              )),
+          ...entradas.map(
+            (e) => ListTile(title: Text(e.key), subtitle: Text('${e.value}')),
+          ),
         ],
       ),
     );

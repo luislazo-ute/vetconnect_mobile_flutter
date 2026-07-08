@@ -41,15 +41,15 @@ class CitaDto {
   }
 
   Cita toDomain() => Cita(
-        id: id,
-        mascota: mascota,
-        mascotaNombre: mascotaNombre,
-        veterinario: veterinario,
-        veterinarioNombre: veterinarioNombre,
-        fecha: fecha,
-        hora: hora,
-        motivo: motivo,
-        estado: estado,
-        estadoDisplay: estadoDisplay,
-      );
+    id: id,
+    mascota: mascota,
+    mascotaNombre: mascotaNombre,
+    veterinario: veterinario,
+    veterinarioNombre: veterinarioNombre,
+    fecha: fecha,
+    hora: hora,
+    motivo: motivo,
+    estado: estado,
+    estadoDisplay: estadoDisplay,
+  );
 }

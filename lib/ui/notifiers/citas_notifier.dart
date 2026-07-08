@@ -5,7 +5,6 @@ import '../../domain/usecases/obtener_citas_uc.dart';
 import '../providers/cita_providers.dart';
 import 'citas_state.dart';
 
-/// Notifier de la lista de citas.
 class CitasNotifier extends Notifier<CitasState> {
   late final ObtenerCitasUc _obtenerCitas;
 
@@ -36,7 +35,10 @@ class CitasNotifier extends Notifier<CitasState> {
     state = state.copyWith(cargandoMas: true);
     try {
       final siguiente = state.paginaActual + 1;
-      final pagina = await _obtenerCitas(pagina: siguiente, busqueda: state.busqueda);
+      final pagina = await _obtenerCitas(
+        pagina: siguiente,
+        busqueda: state.busqueda,
+      );
       state = state.copyWith(
         citas: [...state.citas, ...pagina.results],
         cargandoMas: false,
@@ -54,5 +56,6 @@ class CitasNotifier extends Notifier<CitasState> {
   }
 }
 
-final citasNotifierProvider =
-    NotifierProvider<CitasNotifier, CitasState>(CitasNotifier.new);
+final citasNotifierProvider = NotifierProvider<CitasNotifier, CitasState>(
+  CitasNotifier.new,
+);

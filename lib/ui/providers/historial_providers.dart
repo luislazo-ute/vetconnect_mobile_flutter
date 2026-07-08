@@ -11,9 +11,12 @@ final historialRepositoryProvider = Provider<IHistorialRepository>((ref) {
   return HistorialRepositoryImpl(ref.watch(clienteAutenticadoProvider));
 });
 
-final obtenerHistorialesUcProvider =
-    Provider((ref) => ObtenerHistorialesUc(ref.watch(historialRepositoryProvider)));
-final crearHistorialUcProvider =
-    Provider((ref) => CrearHistorialUc(ref.watch(historialRepositoryProvider)));
-final actualizarHistorialUcProvider =
-    Provider((ref) => ActualizarHistorialUc(ref.watch(historialRepositoryProvider)));
+final obtenerHistorialesUcProvider = Provider(
+  (ref) => ObtenerHistorialesUc(ref.watch(historialRepositoryProvider)),
+);
+final crearHistorialUcProvider = Provider(
+  (ref) => CrearHistorialUc(ref.watch(historialRepositoryProvider)),
+);
+final actualizarHistorialUcProvider = Provider(
+  (ref) => ActualizarHistorialUc(ref.watch(historialRepositoryProvider)),
+);

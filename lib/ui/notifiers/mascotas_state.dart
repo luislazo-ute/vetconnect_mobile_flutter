@@ -1,6 +1,5 @@
 import '../../domain/entities/mascota.dart';
 
-/// Estado inmutable de la lista de mascotas.
 class MascotasState {
   final List<Mascota> mascotas;
   final bool cargando;

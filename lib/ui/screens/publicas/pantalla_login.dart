@@ -25,10 +25,8 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
 
   void _entrar() {
     if (_formKey.currentState!.validate()) {
-      // COMPLETAR: llama al login del notifier con usuario y contraseña.
-      // Pista: ref.read(authNotifierProvider.notifier)
-      //            .iniciarSesion(_userCtrl.text.trim(), _passCtrl.text);
-      ref.read(authNotifierProvider.notifier)
+      ref
+          .read(authNotifierProvider.notifier)
           .iniciarSesion(_userCtrl.text.trim(), _passCtrl.text);
     }
   }
@@ -37,7 +35,6 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
   Widget build(BuildContext context) {
     final estado = ref.watch(authNotifierProvider);
 
-    // Efecto secundario: si aparece un error, mostrar SnackBar rojo.
     ref.listen(authNotifierProvider, (previo, actual) {
       if (actual.error != null && actual.error != previo?.error) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -62,8 +59,11 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
                 labelText: 'Usuario',
                 border: OutlineInputBorder(),
               ),
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Ingresa tu usuario' : null,
+              validator:
+                  (v) =>
+                      (v == null || v.trim().isEmpty)
+                          ? 'Ingresa tu usuario'
+                          : null,
             ),
             const SizedBox(height: 16),
             TextFormField(
@@ -73,21 +73,24 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
                 labelText: 'Contraseña',
                 border: OutlineInputBorder(),
               ),
-              validator: (v) =>
-                  (v == null || v.isEmpty) ? 'Ingresa tu contraseña' : null,
+              validator:
+                  (v) =>
+                      (v == null || v.isEmpty) ? 'Ingresa tu contraseña' : null,
             ),
             const SizedBox(height: 24),
             FilledButton(
-              // Deshabilitado mientras carga (evita doble envío).
               onPressed: estado.cargando ? null : _entrar,
-              child: estado.cargando
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white),
-                    )
-                  : const Text('Entrar'),
+              child:
+                  estado.cargando
+                      ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                      : const Text('Entrar'),
             ),
             const SizedBox(height: 16),
             const Text(

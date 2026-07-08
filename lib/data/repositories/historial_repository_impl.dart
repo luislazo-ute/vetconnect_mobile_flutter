@@ -32,8 +32,12 @@ class HistorialRepositoryImpl implements IHistorialRepository {
     return _envolver(() async {
       final r = await _cliente.get(uri).timeout(Constantes.timeout);
       if (r.statusCode == 200) {
-        final json = jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
-        return PaginaDto.fromJson(json, (i) => HistorialDto.fromJson(i).toDomain());
+        final json =
+            jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
+        return PaginaDto.fromJson(
+          json,
+          (i) => HistorialDto.fromJson(i).toDomain(),
+        );
       }
       throw ExcepcionApi('Error del servidor (${r.statusCode}).');
     });

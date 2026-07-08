@@ -5,7 +5,6 @@ import '../../domain/usecases/obtener_mascotas_uc.dart';
 import '../providers/mascota_providers.dart';
 import 'mascotas_state.dart';
 
-/// Notifier de la lista de mascotas.
 class MascotasNotifier extends Notifier<MascotasState> {
   late final ObtenerMascotasUc _obtenerMascotas;
 
@@ -19,7 +18,10 @@ class MascotasNotifier extends Notifier<MascotasState> {
   Future<void> cargar() async {
     state = state.copyWith(cargando: true, limpiarError: true);
     try {
-      final pagina = await _obtenerMascotas(pagina: 1, busqueda: state.busqueda);
+      final pagina = await _obtenerMascotas(
+        pagina: 1,
+        busqueda: state.busqueda,
+      );
       state = state.copyWith(
         mascotas: pagina.results,
         cargando: false,
@@ -36,8 +38,10 @@ class MascotasNotifier extends Notifier<MascotasState> {
     state = state.copyWith(cargandoMas: true);
     try {
       final siguiente = state.paginaActual + 1;
-      final pagina =
-          await _obtenerMascotas(pagina: siguiente, busqueda: state.busqueda);
+      final pagina = await _obtenerMascotas(
+        pagina: siguiente,
+        busqueda: state.busqueda,
+      );
       state = state.copyWith(
         mascotas: [...state.mascotas, ...pagina.results],
         cargandoMas: false,

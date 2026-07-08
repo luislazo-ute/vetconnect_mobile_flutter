@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../core/tema.dart';
 
-/// Pantalla de carga inicial, mientras se verifica si hay sesión guardada.
 class PantallaSplash extends StatelessWidget {
   const PantallaSplash({super.key});
 

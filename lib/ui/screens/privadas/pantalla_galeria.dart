@@ -7,7 +7,6 @@ import '../../providers/rol_provider.dart';
 import 'pantalla_galeria_detalle.dart';
 import 'pantalla_galeria_formulario.dart';
 
-/// Galería de fotos de mascotas (MongoDB): grilla con Image.network.
 class PantallaGaleria extends ConsumerWidget {
   const PantallaGaleria({super.key});
 
@@ -23,26 +22,31 @@ class PantallaGaleria extends ConsumerWidget {
           if (esAdmin)
             IconButton(
               icon: const Icon(Icons.add_a_photo_outlined),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => const PantallaGaleriaFormulario())),
+              onPressed:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const PantallaGaleriaFormulario(),
+                    ),
+                  ),
             ),
         ],
       ),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('$e'),
-              const SizedBox(height: 12),
-              FilledButton(
-                onPressed: () => ref.invalidate(galeriaProvider),
-                child: const Text('Reintentar'),
+        error:
+            (e, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('$e'),
+                  const SizedBox(height: 12),
+                  FilledButton(
+                    onPressed: () => ref.invalidate(galeriaProvider),
+                    child: const Text('Reintentar'),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (fotos) {
           if (fotos.isEmpty) {
             return const Center(child: Text('No hay fotos aún.'));
@@ -58,8 +62,12 @@ class PantallaGaleria extends ConsumerWidget {
             itemBuilder: (context, i) {
               final f = fotos[i];
               return GestureDetector(
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => PantallaGaleriaDetalle(foto: f))),
+                onTap:
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => PantallaGaleriaDetalle(foto: f),
+                      ),
+                    ),
                 child: Hero(
                   tag: 'foto-${f.id}',
                   child: ClipRRect(
@@ -67,16 +75,22 @@ class PantallaGaleria extends ConsumerWidget {
                     child: Image.network(
                       f.url,
                       fit: BoxFit.cover,
-                      // Mientras carga: spinner. Si falla: placeholder.
-                      loadingBuilder: (context, child, progress) =>
-                          progress == null
-                              ? child
-                              : const Center(child: CircularProgressIndicator()),
-                      errorBuilder: (context, error, stack) => Container(
-                        color: Colors.grey.shade200,
-                        child: const Icon(Icons.broken_image,
-                            size: 40, color: Colors.grey),
-                      ),
+                      loadingBuilder:
+                          (context, child, progress) =>
+                              progress == null
+                                  ? child
+                                  : const Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                      errorBuilder:
+                          (context, error, stack) => Container(
+                            color: Colors.grey.shade200,
+                            child: const Icon(
+                              Icons.broken_image,
+                              size: 40,
+                              color: Colors.grey,
+                            ),
+                          ),
                     ),
                   ),
                 ),

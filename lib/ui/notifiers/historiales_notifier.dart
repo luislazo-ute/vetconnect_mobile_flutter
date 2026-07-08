@@ -35,7 +35,10 @@ class HistorialesNotifier extends Notifier<HistorialesState> {
     state = state.copyWith(cargandoMas: true);
     try {
       final siguiente = state.paginaActual + 1;
-      final pagina = await _obtener(pagina: siguiente, busqueda: state.busqueda);
+      final pagina = await _obtener(
+        pagina: siguiente,
+        busqueda: state.busqueda,
+      );
       state = state.copyWith(
         historiales: [...state.historiales, ...pagina.results],
         cargandoMas: false,
@@ -55,4 +58,5 @@ class HistorialesNotifier extends Notifier<HistorialesState> {
 
 final historialesNotifierProvider =
     NotifierProvider<HistorialesNotifier, HistorialesState>(
-        HistorialesNotifier.new);
+      HistorialesNotifier.new,
+    );

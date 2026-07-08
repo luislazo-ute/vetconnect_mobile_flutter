@@ -4,5 +4,6 @@ class CrearVeterinarioUc {
   final IVeterinarioRepository _repo;
   CrearVeterinarioUc(this._repo);
 
-  Future<void> call(Map<String, dynamic> datos) => _repo.crearVeterinario(datos);
+  Future<void> call(Map<String, dynamic> datos) =>
+      _repo.crearVeterinario(datos);
 }

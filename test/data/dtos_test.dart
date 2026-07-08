@@ -1,4 +1,3 @@
-// Tests de DTOs: verifican el parseo del JSON real de la API.
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:vetconnect_app/data/dtos/galeria_foto_dto.dart';
@@ -45,14 +44,18 @@ void main() {
       'previous': null,
       'results': [
         {
-          'id': 1, 'nombre': 'S', 'descripcion': '', 'precio': '10.00',
-          'duracion_minutos': 30, 'is_active': true,
-        }
+          'id': 1,
+          'nombre': 'S',
+          'descripcion': '',
+          'precio': '10.00',
+          'duracion_minutos': 30,
+          'is_active': true,
+        },
       ],
     }, (item) => ServicioDto.fromJson(item).toDomain());
 
     expect(pagina.count, 1);
-    expect(pagina.hayMas, true); // next != null
+    expect(pagina.hayMas, true);
     expect(pagina.results.first.nombre, 'S');
   });
 
@@ -62,7 +65,7 @@ void main() {
       'mascota_id': 1,
       'descripcion': 'control',
       'fotos': [
-        {'url': 'https://ej.com/a.jpg', 'descripcion': 'x'}
+        {'url': 'https://ej.com/a.jpg', 'descripcion': 'x'},
       ],
     });
     expect(dto.url, 'https://ej.com/a.jpg');

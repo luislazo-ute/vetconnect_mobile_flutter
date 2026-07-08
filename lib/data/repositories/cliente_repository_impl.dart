@@ -19,15 +19,19 @@ class ClienteRepositoryImpl implements IClienteRepository {
 
   @override
   Future<List<Cliente>> obtenerClientes() {
-    final uri = Uri.parse('${Constantes.urlBase}clientes/')
-        .replace(queryParameters: {'page_size': '100'});
+    final uri = Uri.parse(
+      '${Constantes.urlBase}clientes/',
+    ).replace(queryParameters: {'page_size': '100'});
     return _envolver(() async {
       final r = await _cliente.get(uri).timeout(Constantes.timeout);
       if (r.statusCode == 200) {
-        final json = jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
+        final json =
+            jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
         final lista = json['results'] as List;
         return lista
-            .map((e) => ClienteDto.fromJson(e as Map<String, dynamic>).toDomain())
+            .map(
+              (e) => ClienteDto.fromJson(e as Map<String, dynamic>).toDomain(),
+            )
             .toList();
       }
       throw ExcepcionApi('Error del servidor (${r.statusCode}).');

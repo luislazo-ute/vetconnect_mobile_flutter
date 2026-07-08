@@ -1,5 +1,3 @@
-// Test de use case con mockito: el mock se genera sobre la INTERFAZ.
-// Generar mocks: dart run build_runner build --delete-conflicting-outputs
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -16,12 +14,18 @@ void main() {
   test('ObtenerServiciosUc delega en el repositorio', () async {
     final repo = MockIServicioRepository();
     final paginaEsperada = PaginaDto<Servicio>(
-        count: 0, next: null, previous: null, results: const []);
+      count: 0,
+      next: null,
+      previous: null,
+      results: const [],
+    );
 
-    when(repo.obtenerServicios(
-      pagina: anyNamed('pagina'),
-      busqueda: anyNamed('busqueda'),
-    )).thenAnswer((_) async => paginaEsperada);
+    when(
+      repo.obtenerServicios(
+        pagina: anyNamed('pagina'),
+        busqueda: anyNamed('busqueda'),
+      ),
+    ).thenAnswer((_) async => paginaEsperada);
 
     final uc = ObtenerServiciosUc(repo);
     final resultado = await uc(pagina: 2, busqueda: 'vac');

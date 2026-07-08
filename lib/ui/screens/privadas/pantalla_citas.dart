@@ -11,9 +11,6 @@ import '../../providers/cita_providers.dart';
 import '../../providers/rol_provider.dart';
 import 'pantalla_cita_formulario.dart';
 
-/// Lista de citas con chips de estado. Roles:
-///  - USUARIO/ADMIN: botón "Agendar".
-///  - DOCTOR/ADMIN: cambiar el estado tocando el chip.
 class PantallaCitas extends ConsumerStatefulWidget {
   const PantallaCitas({super.key});
 
@@ -46,7 +43,9 @@ class _PantallaCitasState extends ConsumerState<PantallaCitas> {
     try {
       await ref.read(cambiarEstadoCitaUcProvider)(c.id, nuevo);
       ref.read(citasNotifierProvider.notifier).cargar();
-      messenger.showSnackBar(SnackBar(content: Text('Cita marcada como "$nuevo"')));
+      messenger.showSnackBar(
+        SnackBar(content: Text('Cita marcada como "$nuevo"')),
+      );
     } on ExcepcionApi catch (e) {
       messenger.showSnackBar(
         SnackBar(content: Text(e.mensaje), backgroundColor: Colors.red),
@@ -55,12 +54,12 @@ class _PantallaCitasState extends ConsumerState<PantallaCitas> {
   }
 
   Color _colorEstado(String estado) => switch (estado) {
-        'pendiente' => Colors.amber.shade800,
-        'confirmada' => Colors.blue.shade700,
-        'completada' => TemaApp.verdeBosque,
-        'cancelada' => Colors.red.shade400,
-        _ => Colors.grey,
-      };
+    'pendiente' => Colors.amber.shade800,
+    'confirmada' => Colors.blue.shade700,
+    'completada' => TemaApp.verdeBosque,
+    'cancelada' => Colors.red.shade400,
+    _ => Colors.grey,
+  };
 
   Widget _chipEstado(Cita c) {
     final color = _colorEstado(c.estado);
@@ -72,7 +71,11 @@ class _PantallaCitasState extends ConsumerState<PantallaCitas> {
       ),
       child: Text(
         c.estadoDisplay,
-        style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 12),
+        style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+        ),
       ),
     );
   }
@@ -93,15 +96,20 @@ class _PantallaCitasState extends ConsumerState<PantallaCitas> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Citas',
-                    style: textos.headlineSmall
-                        ?.copyWith(fontWeight: FontWeight.bold)),
+                Text(
+                  'Citas',
+                  style: textos.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 if (puedeAgendar)
                   TextButton.icon(
-                    onPressed: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (_) => const PantallaCitaFormulario()),
-                    ),
+                    onPressed:
+                        () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const PantallaCitaFormulario(),
+                          ),
+                        ),
                     icon: const Icon(Icons.add),
                     label: const Text('Agendar'),
                   ),
@@ -126,7 +134,8 @@ class _PantallaCitasState extends ConsumerState<PantallaCitas> {
             Text(estado.error!),
             const SizedBox(height: 12),
             FilledButton(
-              onPressed: () => ref.read(citasNotifierProvider.notifier).cargar(),
+              onPressed:
+                  () => ref.read(citasNotifierProvider.notifier).cargar(),
               child: const Text('Reintentar'),
             ),
           ],
@@ -152,23 +161,34 @@ class _PantallaCitasState extends ConsumerState<PantallaCitas> {
           child: ListTile(
             leading: const CircleAvatar(child: Icon(Icons.event)),
             title: Text(c.mascotaNombre),
-            subtitle: Text(
-              '${c.fechaCorta} · ${c.horaCorta}\n${c.motivo}',
-            ),
+            subtitle: Text('${c.fechaCorta} · ${c.horaCorta}\n${c.motivo}'),
             isThreeLine: true,
-            // El doctor/admin cambia el estado tocando el chip.
-            trailing: puedeCambiar
-                ? PopupMenuButton<String>(
-                    onSelected: (nuevo) => _cambiarEstado(c, nuevo),
-                    itemBuilder: (_) => const [
-                      PopupMenuItem(value: 'pendiente', child: Text('Pendiente')),
-                      PopupMenuItem(value: 'confirmada', child: Text('Confirmada')),
-                      PopupMenuItem(value: 'completada', child: Text('Completada')),
-                      PopupMenuItem(value: 'cancelada', child: Text('Cancelada')),
-                    ],
-                    child: _chipEstado(c),
-                  )
-                : _chipEstado(c),
+            trailing:
+                puedeCambiar
+                    ? PopupMenuButton<String>(
+                      onSelected: (nuevo) => _cambiarEstado(c, nuevo),
+                      itemBuilder:
+                          (_) => const [
+                            PopupMenuItem(
+                              value: 'pendiente',
+                              child: Text('Pendiente'),
+                            ),
+                            PopupMenuItem(
+                              value: 'confirmada',
+                              child: Text('Confirmada'),
+                            ),
+                            PopupMenuItem(
+                              value: 'completada',
+                              child: Text('Completada'),
+                            ),
+                            PopupMenuItem(
+                              value: 'cancelada',
+                              child: Text('Cancelada'),
+                            ),
+                          ],
+                      child: _chipEstado(c),
+                    )
+                    : _chipEstado(c),
           ),
         );
       },

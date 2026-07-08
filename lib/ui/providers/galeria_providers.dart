@@ -11,12 +11,13 @@ final galeriaRepositoryProvider = Provider<IGaleriaRepository>((ref) {
   return GaleriaRepositoryImpl(ref.watch(clienteAutenticadoProvider));
 });
 
-final obtenerGaleriaUcProvider =
-    Provider((ref) => ObtenerGaleriaUc(ref.watch(galeriaRepositoryProvider)));
-final crearFotoUcProvider =
-    Provider((ref) => CrearFotoUc(ref.watch(galeriaRepositoryProvider)));
+final obtenerGaleriaUcProvider = Provider(
+  (ref) => ObtenerGaleriaUc(ref.watch(galeriaRepositoryProvider)),
+);
+final crearFotoUcProvider = Provider(
+  (ref) => CrearFotoUc(ref.watch(galeriaRepositoryProvider)),
+);
 
-/// La lista de fotos (async, sin paginación). Se refresca con ref.invalidate.
 final galeriaProvider = FutureProvider<List<GaleriaFoto>>((ref) {
   return ref.watch(obtenerGaleriaUcProvider)();
 });

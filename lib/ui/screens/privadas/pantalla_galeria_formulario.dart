@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
-import '../../providers/cita_providers.dart'; // mascotasTodasProvider
+import '../../providers/cita_providers.dart';
 import '../../providers/galeria_providers.dart';
 
-/// Formulario para agregar una foto a la galería (solo ADMIN).
 class PantallaGaleriaFormulario extends ConsumerStatefulWidget {
   const PantallaGaleriaFormulario({super.key});
 
@@ -38,7 +37,7 @@ class _GaleriaFormState extends ConsumerState<PantallaGaleriaFormulario> {
     final messenger = ScaffoldMessenger.of(context);
     try {
       await ref.read(crearFotoUcProvider)(datos);
-      ref.invalidate(galeriaProvider); // refresca la grilla
+      ref.invalidate(galeriaProvider);
       if (mounted) {
         Navigator.of(context).pop();
         messenger.showSnackBar(const SnackBar(content: Text('Foto agregada')));
@@ -57,55 +56,74 @@ class _GaleriaFormState extends ConsumerState<PantallaGaleriaFormulario> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Agregar foto')),
-      body: mascotas.isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : mascotas.hasError
+      body:
+          mascotas.isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : mascotas.hasError
               ? const Center(child: Text('Error cargando mascotas'))
               : Form(
-                  key: _formKey,
-                  child: ListView(
-                    padding: const EdgeInsets.all(20),
-                    children: [
-                      DropdownButtonFormField<int>(
-                        initialValue: _mascotaId,
-                        decoration: const InputDecoration(
-                            labelText: 'Mascota', border: OutlineInputBorder()),
-                        items: mascotas.value!
-                            .map((m) => DropdownMenuItem(
-                                value: m.id, child: Text(m.nombre)))
-                            .toList(),
-                        onChanged: (v) => setState(() => _mascotaId = v),
-                        validator: (v) => v == null ? 'Selecciona una mascota' : null,
+                key: _formKey,
+                child: ListView(
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    DropdownButtonFormField<int>(
+                      initialValue: _mascotaId,
+                      decoration: const InputDecoration(
+                        labelText: 'Mascota',
+                        border: OutlineInputBorder(),
                       ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _urlCtrl,
-                        decoration: const InputDecoration(
-                            labelText: 'URL de la foto',
-                            border: OutlineInputBorder()),
-                        validator: (v) => (v == null || v.trim().isEmpty)
-                            ? 'Ingresa la URL de la imagen'
-                            : null,
+                      items:
+                          mascotas.value!
+                              .map(
+                                (m) => DropdownMenuItem(
+                                  value: m.id,
+                                  child: Text(m.nombre),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (v) => setState(() => _mascotaId = v),
+                      validator:
+                          (v) => v == null ? 'Selecciona una mascota' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _urlCtrl,
+                      decoration: const InputDecoration(
+                        labelText: 'URL de la foto',
+                        border: OutlineInputBorder(),
                       ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _descCtrl,
-                        decoration: const InputDecoration(
-                            labelText: 'Descripción', border: OutlineInputBorder()),
+                      validator:
+                          (v) =>
+                              (v == null || v.trim().isEmpty)
+                                  ? 'Ingresa la URL de la imagen'
+                                  : null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _descCtrl,
+                      decoration: const InputDecoration(
+                        labelText: 'Descripción',
+                        border: OutlineInputBorder(),
                       ),
-                      const SizedBox(height: 24),
-                      FilledButton(
-                        onPressed: _guardando ? null : _guardar,
-                        child: _guardando
-                            ? const SizedBox(
-                                height: 20, width: 20,
+                    ),
+                    const SizedBox(height: 24),
+                    FilledButton(
+                      onPressed: _guardando ? null : _guardar,
+                      child:
+                          _guardando
+                              ? const SizedBox(
+                                height: 20,
+                                width: 20,
                                 child: CircularProgressIndicator(
-                                    strokeWidth: 2, color: Colors.white))
-                            : const Text('Agregar foto'),
-                      ),
-                    ],
-                  ),
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                              : const Text('Agregar foto'),
+                    ),
+                  ],
                 ),
+              ),
     );
   }
 }

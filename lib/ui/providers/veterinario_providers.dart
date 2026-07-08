@@ -9,7 +9,6 @@ import '../../domain/usecases/obtener_veterinarios_uc.dart';
 import 'cliente_autenticado_provider.dart';
 import 'http_provider.dart';
 
-/// Repositorio de veterinarios para LECTURA PÚBLICA (cliente plano, sin token).
 final veterinarioRepositoryProvider = Provider<IVeterinarioRepository>((ref) {
   return VeterinarioRepositoryImpl(ref.watch(httpClientProvider));
 });
@@ -18,14 +17,19 @@ final obtenerVeterinariosUcProvider = Provider<ObtenerVeterinariosUc>((ref) {
   return ObtenerVeterinariosUc(ref.watch(veterinarioRepositoryProvider));
 });
 
-/// Repositorio de veterinarios para ESCRITURA ADMIN (cliente autenticado).
-final veterinarioAdminRepositoryProvider = Provider<IVeterinarioRepository>((ref) {
+final veterinarioAdminRepositoryProvider = Provider<IVeterinarioRepository>((
+  ref,
+) {
   return VeterinarioRepositoryImpl(ref.watch(clienteAutenticadoProvider));
 });
 
-final crearVeterinarioUcProvider =
-    Provider((ref) => CrearVeterinarioUc(ref.watch(veterinarioAdminRepositoryProvider)));
-final actualizarVeterinarioUcProvider =
-    Provider((ref) => ActualizarVeterinarioUc(ref.watch(veterinarioAdminRepositoryProvider)));
-final eliminarVeterinarioUcProvider =
-    Provider((ref) => EliminarVeterinarioUc(ref.watch(veterinarioAdminRepositoryProvider)));
+final crearVeterinarioUcProvider = Provider(
+  (ref) => CrearVeterinarioUc(ref.watch(veterinarioAdminRepositoryProvider)),
+);
+final actualizarVeterinarioUcProvider = Provider(
+  (ref) =>
+      ActualizarVeterinarioUc(ref.watch(veterinarioAdminRepositoryProvider)),
+);
+final eliminarVeterinarioUcProvider = Provider(
+  (ref) => EliminarVeterinarioUc(ref.watch(veterinarioAdminRepositoryProvider)),
+);

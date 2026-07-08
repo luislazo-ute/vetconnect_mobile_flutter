@@ -14,7 +14,6 @@ import 'pantalla_historiales.dart';
 import 'pantalla_mascotas.dart';
 import 'pantalla_veterinarios_admin.dart';
 
-/// Dashboard privado con bottom nav flotante y contenido según el rol.
 class PantallaDashboard extends ConsumerStatefulWidget {
   const PantallaDashboard({super.key});
 
@@ -23,7 +22,6 @@ class PantallaDashboard extends ConsumerStatefulWidget {
 }
 
 class _PantallaDashboardState extends ConsumerState<PantallaDashboard> {
-  // Índice de la pestaña activa (estado local de UI → setState está bien).
   int _indice = 0;
 
   static const _paginas = [
@@ -38,9 +36,7 @@ class _PantallaDashboardState extends ConsumerState<PantallaDashboard> {
     return Scaffold(
       body: Stack(
         children: [
-          // La página activa.
           _paginas[_indice],
-          // El nav flotando sobre el contenido, abajo.
           Align(
             alignment: Alignment.bottomCenter,
             child: SafeArea(
@@ -62,7 +58,6 @@ class _PantallaDashboardState extends ConsumerState<PantallaDashboard> {
   }
 }
 
-/// --- Pestaña Inicio: saludo + qué puede hacer según su rol. ---
 class _TabInicio extends ConsumerWidget {
   const _TabInicio();
 
@@ -73,7 +68,6 @@ class _TabInicio extends ConsumerWidget {
 
     return SafeArea(
       child: ListView(
-        // El padding inferior (100) deja aire para el nav flotante.
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
         children: [
           Text('Hola,', style: textos.bodyLarge?.copyWith(color: Colors.grey)),
@@ -89,7 +83,10 @@ class _TabInicio extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               child: Row(
                 children: [
-                  const Icon(Icons.verified_user_outlined, color: TemaApp.verdeBosque),
+                  const Icon(
+                    Icons.verified_user_outlined,
+                    color: TemaApp.verdeBosque,
+                  ),
                   const SizedBox(width: 12),
                   Expanded(child: Text(_descripcionRol(usuario?.rol))),
                 ],
@@ -97,68 +94,95 @@ class _TabInicio extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 12),
-          // Acceso a la galería MongoDB.
           Card(
             child: ListTile(
-              leading: const Icon(Icons.photo_library_outlined,
-                  color: TemaApp.verdeBosque),
+              leading: const Icon(
+                Icons.photo_library_outlined,
+                color: TemaApp.verdeBosque,
+              ),
               title: const Text('Galería de mascotas'),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const PantallaGaleria()),
-              ),
+              onTap:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const PantallaGaleria()),
+                  ),
             ),
           ),
           Card(
             child: ListTile(
-              leading: const Icon(Icons.description_outlined,
-                  color: TemaApp.verdeBosque),
+              leading: const Icon(
+                Icons.description_outlined,
+                color: TemaApp.verdeBosque,
+              ),
               title: const Text('Historiales médicos'),
               trailing: const Icon(Icons.chevron_right),
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const PantallaHistoriales()),
-              ),
+              onTap:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const PantallaHistoriales(),
+                    ),
+                  ),
             ),
           ),
           const SizedBox(height: 20),
-          Text('Datos clínicos (MongoDB)',
-              style: textos.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            'Datos clínicos (MongoDB)',
+            style: textos.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
-          // Las 4 colecciones Mongo, reutilizando la misma pantalla genérica.
-          ...coleccionesMongo.map((col) => Card(
-                child: ListTile(
-                  leading: Icon(col.icono, color: TemaApp.verdeBosque),
-                  title: Text(col.titulo),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => PantallaColeccionMongo(config: col))),
-                ),
-              )),
+          ...coleccionesMongo.map(
+            (col) => Card(
+              child: ListTile(
+                leading: Icon(col.icono, color: TemaApp.verdeBosque),
+                title: Text(col.titulo),
+                trailing: const Icon(Icons.chevron_right),
+                onTap:
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => PantallaColeccionMongo(config: col),
+                      ),
+                    ),
+              ),
+            ),
+          ),
 
-          // Gestión administrativa: solo ADMIN.
           if (usuario?.rol == Rol.admin) ...[
             const SizedBox(height: 20),
-            Text('Gestión (admin)',
-                style: textos.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+            Text(
+              'Gestión (admin)',
+              style: textos.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 8),
             Card(
               child: ListTile(
-                leading: const Icon(Icons.medical_information_outlined,
-                    color: TemaApp.verdeBosque),
+                leading: const Icon(
+                  Icons.medical_information_outlined,
+                  color: TemaApp.verdeBosque,
+                ),
                 title: const Text('Veterinarios'),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => const PantallaVeterinariosAdmin())),
+                onTap:
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PantallaVeterinariosAdmin(),
+                      ),
+                    ),
               ),
             ),
             Card(
               child: ListTile(
-                leading: const Icon(Icons.groups_outlined,
-                    color: TemaApp.verdeBosque),
+                leading: const Icon(
+                  Icons.groups_outlined,
+                  color: TemaApp.verdeBosque,
+                ),
                 title: const Text('Clientes'),
                 trailing: const Icon(Icons.chevron_right),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => const PantallaClientesAdmin())),
+                onTap:
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PantallaClientesAdmin(),
+                      ),
+                    ),
               ),
             ),
           ],
@@ -168,17 +192,16 @@ class _TabInicio extends ConsumerWidget {
   }
 
   String _descripcionRol(Rol? rol) => switch (rol) {
-        Rol.admin =>
-          'Acceso total: puedes crear, editar y eliminar en todo el sistema.',
-        Rol.doctor =>
-          'Puedes cambiar el estado de las citas y crear/editar historiales médicos.',
-        Rol.usuario =>
-          'Puedes agendar citas y consultar la información de la clínica.',
-        null => 'Sin sesión.',
-      };
+    Rol.admin =>
+      'Acceso total: puedes crear, editar y eliminar en todo el sistema.',
+    Rol.doctor =>
+      'Puedes cambiar el estado de las citas y crear/editar historiales médicos.',
+    Rol.usuario =>
+      'Puedes agendar citas y consultar la información de la clínica.',
+    null => 'Sin sesión.',
+  };
 }
 
-/// Chip de color con el nombre del rol.
 class _ChipRol extends StatelessWidget {
   final Rol? rol;
   const _ChipRol({required this.rol});
@@ -205,7 +228,6 @@ class _ChipRol extends StatelessWidget {
   }
 }
 
-/// --- Pestaña Perfil: datos del usuario + cerrar sesión. ---
 class _TabPerfil extends ConsumerWidget {
   const _TabPerfil();
 
@@ -230,14 +252,16 @@ class _TabPerfil extends ConsumerWidget {
           Center(
             child: Text(
               usuario?.username ?? '',
-              style: textos.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+              style: textos.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Center(child: Text(usuario?.email ?? '', style: textos.bodyMedium)),
           const SizedBox(height: 32),
           FilledButton.icon(
-            onPressed: () =>
-                ref.read(authNotifierProvider.notifier).cerrarSesion(),
+            onPressed:
+                () => ref.read(authNotifierProvider.notifier).cerrarSesion(),
             icon: const Icon(Icons.logout),
             label: const Text('Cerrar sesión'),
           ),

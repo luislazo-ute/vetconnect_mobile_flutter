@@ -3,43 +3,44 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/tema.dart';
 
-/// Home público estilo Whisk: saludo, tarjeta resumen y secciones.
 class PantallaHome extends StatelessWidget {
   const PantallaHome({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final textos = Theme.of(context).textTheme; // atajo para los estilos de texto
+    final textos = Theme.of(context).textTheme;
 
     return Scaffold(
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            // === Encabezado: saludo + campana ===
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Bienvenido a',
-                        style: textos.bodyMedium?.copyWith(color: Colors.grey)),
-                    Text('VetConnect',
-                        style: textos.headlineSmall
-                            ?.copyWith(fontWeight: FontWeight.bold)),
+                    Text(
+                      'Bienvenido a',
+                      style: textos.bodyMedium?.copyWith(color: Colors.grey),
+                    ),
+                    Text(
+                      'VetConnect',
+                      style: textos.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 Row(
                   children: [
-                    // Acceso a la zona privada (login).
                     IconButton(
                       tooltip: 'Iniciar sesión',
                       onPressed: () => context.pushNamed('login'),
                       icon: const Icon(Icons.person_outline),
                     ),
                     IconButton(
-                      // Temporal: la campana abre Contacto (luego notificaciones).
                       onPressed: () => context.pushNamed('contacto'),
                       icon: const Icon(Icons.notifications_outlined),
                     ),
@@ -49,7 +50,6 @@ class PantallaHome extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // === Tarjeta resumen (hero) verde bosque ===
             Container(
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
@@ -59,31 +59,38 @@ class PantallaHome extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Cuidamos a tu mascota 🐾',
-                      style: textos.titleLarge?.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.bold)),
+                  Text(
+                    'Cuidamos a tu mascota 🐾',
+                    style: textos.titleLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   const SizedBox(height: 8),
-                  Text('Servicios veterinarios de confianza para tu mejor amigo.',
-                      style: textos.bodyMedium?.copyWith(color: Colors.white70)),
+                  Text(
+                    'Servicios veterinarios de confianza para tu mejor amigo.',
+                    style: textos.bodyMedium?.copyWith(color: Colors.white70),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 28),
 
-            // === Sección: Servicios ===
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Servicios',
-                    style: textos.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.bold)),
+                Text(
+                  'Servicios',
+                  style: textos.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 TextButton(
                   onPressed: () => context.pushNamed('servicios'),
                   child: const Text('Ver más'),
                 ),
               ],
             ),
-            // Relleno temporal (hasta conectar la API).
             const Card(
               child: ListTile(
                 leading: Icon(Icons.medical_services_outlined),
@@ -92,13 +99,15 @@ class PantallaHome extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // === Sección: Nuestro equipo ===
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Nuestro equipo',
-                    style: textos.titleMedium
-                        ?.copyWith(fontWeight: FontWeight.bold)),
+                Text(
+                  'Nuestro equipo',
+                  style: textos.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 TextButton(
                   onPressed: () => context.pushNamed('equipo'),
                   child: const Text('Ver más'),

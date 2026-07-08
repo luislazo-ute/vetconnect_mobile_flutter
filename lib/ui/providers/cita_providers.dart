@@ -15,22 +15,24 @@ final citaRepositoryProvider = Provider<ICitaRepository>((ref) {
   return CitaRepositoryImpl(ref.watch(clienteAutenticadoProvider));
 });
 
-final obtenerCitasUcProvider =
-    Provider((ref) => ObtenerCitasUc(ref.watch(citaRepositoryProvider)));
-final agendarCitaUcProvider =
-    Provider((ref) => AgendarCitaUc(ref.watch(citaRepositoryProvider)));
-final cambiarEstadoCitaUcProvider =
-    Provider((ref) => CambiarEstadoCitaUc(ref.watch(citaRepositoryProvider)));
+final obtenerCitasUcProvider = Provider(
+  (ref) => ObtenerCitasUc(ref.watch(citaRepositoryProvider)),
+);
+final agendarCitaUcProvider = Provider(
+  (ref) => AgendarCitaUc(ref.watch(citaRepositoryProvider)),
+);
+final cambiarEstadoCitaUcProvider = Provider(
+  (ref) => CambiarEstadoCitaUc(ref.watch(citaRepositoryProvider)),
+);
 
-// --- Datos para los dropdowns del formulario de agendar ---
-/// Todas las mascotas (primera página) para el selector.
 final mascotasTodasProvider = FutureProvider<List<Mascota>>((ref) async {
   final pagina = await ref.watch(obtenerMascotasUcProvider)(pagina: 1);
   return pagina.results;
 });
 
-/// Todos los veterinarios (primera página) para el selector.
-final veterinariosTodosProvider = FutureProvider<List<Veterinario>>((ref) async {
+final veterinariosTodosProvider = FutureProvider<List<Veterinario>>((
+  ref,
+) async {
   final pagina = await ref.watch(obtenerVeterinariosUcProvider)(pagina: 1);
   return pagina.results;
 });

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Pantalla pública de contacto con formulario validado.
 class PantallaContacto extends StatefulWidget {
   const PantallaContacto({super.key});
 
@@ -9,16 +8,13 @@ class PantallaContacto extends StatefulWidget {
 }
 
 class _PantallaContactoState extends State<PantallaContacto> {
-  // "Control remoto" del formulario, para validarlo.
   final _formKey = GlobalKey<FormState>();
-  // Controladores: leen el texto de cada campo.
   final _nombreCtrl = TextEditingController();
   final _correoCtrl = TextEditingController();
   final _mensajeCtrl = TextEditingController();
 
   @override
   void dispose() {
-    // Liberamos los controladores al destruir la pantalla.
     _nombreCtrl.dispose();
     _correoCtrl.dispose();
     _mensajeCtrl.dispose();
@@ -26,12 +22,13 @@ class _PantallaContactoState extends State<PantallaContacto> {
   }
 
   void _enviar() {
-    // validate() ejecuta todos los validators. Si todos pasan, es true.
     if (_formKey.currentState!.validate()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('¡Mensaje enviado! Te contactaremos pronto.')),
+        const SnackBar(
+          content: Text('¡Mensaje enviado! Te contactaremos pronto.'),
+        ),
       );
-      _formKey.currentState!.reset(); // limpia el formulario
+      _formKey.currentState!.reset();
     }
   }
 
@@ -51,7 +48,6 @@ class _PantallaContactoState extends State<PantallaContacto> {
               ),
               const SizedBox(height: 20),
 
-              // --- Nombre ---
               TextFormField(
                 controller: _nombreCtrl,
                 decoration: const InputDecoration(
@@ -62,12 +58,11 @@ class _PantallaContactoState extends State<PantallaContacto> {
                   if (valor == null || valor.trim().isEmpty) {
                     return 'El nombre es obligatorio';
                   }
-                  return null; // válido
+                  return null;
                 },
               ),
               const SizedBox(height: 16),
 
-              // --- Correo ---
               TextFormField(
                 controller: _correoCtrl,
                 keyboardType: TextInputType.emailAddress,
@@ -87,7 +82,6 @@ class _PantallaContactoState extends State<PantallaContacto> {
               ),
               const SizedBox(height: 16),
 
-              // --- Mensaje ---
               TextFormField(
                 controller: _mensajeCtrl,
                 maxLines: 4,

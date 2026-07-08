@@ -5,7 +5,6 @@ import '../../../core/errores.dart';
 import '../../notifiers/citas_notifier.dart';
 import '../../providers/cita_providers.dart';
 
-/// Formulario para agendar una cita (USUARIO/ADMIN).
 class PantallaCitaFormulario extends ConsumerStatefulWidget {
   const PantallaCitaFormulario({super.key});
 
@@ -28,7 +27,7 @@ class _CitaFormState extends ConsumerState<PantallaCitaFormulario> {
     super.dispose();
   }
 
-  String _dd(int n) => n.toString().padLeft(2, '0'); // 5 -> "05"
+  String _dd(int n) => n.toString().padLeft(2, '0');
 
   Future<void> _elegirFecha() async {
     final hoy = DateTime.now();
@@ -42,7 +41,10 @@ class _CitaFormState extends ConsumerState<PantallaCitaFormulario> {
   }
 
   Future<void> _elegirHora() async {
-    final t = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+    final t = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+    );
     if (t != null) setState(() => _hora = t);
   }
 
@@ -50,14 +52,22 @@ class _CitaFormState extends ConsumerState<PantallaCitaFormulario> {
     if (!_formKey.currentState!.validate()) return;
     if (_fecha == null || _hora == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Elige fecha y hora'), backgroundColor: Colors.red),
+        const SnackBar(
+          content: Text('Elige fecha y hora'),
+          backgroundColor: Colors.red,
+        ),
       );
       return;
     }
     setState(() => _guardando = true);
 
     final dt = DateTime(
-        _fecha!.year, _fecha!.month, _fecha!.day, _hora!.hour, _hora!.minute);
+      _fecha!.year,
+      _fecha!.month,
+      _fecha!.day,
+      _hora!.hour,
+      _hora!.minute,
+    );
     final datos = {
       'mascota': _mascotaId,
       'veterinario': _vetId,
@@ -68,8 +78,6 @@ class _CitaFormState extends ConsumerState<PantallaCitaFormulario> {
 
     final messenger = ScaffoldMessenger.of(context);
     try {
-      // COMPLETAR: agenda la cita con el use case.
-      // Pista: await ref.read(agendarCitaUcProvider)(datos);
       await ref.read(agendarCitaUcProvider)(datos);
       ref.read(citasNotifierProvider.notifier).cargar();
       if (mounted) {
@@ -91,74 +99,105 @@ class _CitaFormState extends ConsumerState<PantallaCitaFormulario> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Agendar cita')),
-      body: (mascotas.isLoading || vets.isLoading)
-          ? const Center(child: CircularProgressIndicator())
-          : (mascotas.hasError || vets.hasError)
+      body:
+          (mascotas.isLoading || vets.isLoading)
+              ? const Center(child: CircularProgressIndicator())
+              : (mascotas.hasError || vets.hasError)
               ? const Center(child: Text('Error cargando datos'))
               : Form(
-                  key: _formKey,
-                  child: ListView(
-                    padding: const EdgeInsets.all(20),
-                    children: [
-                      DropdownButtonFormField<int>(
-                        initialValue: _mascotaId,
-                        decoration: const InputDecoration(
-                            labelText: 'Mascota', border: OutlineInputBorder()),
-                        items: mascotas.value!
-                            .map((m) => DropdownMenuItem(
-                                value: m.id, child: Text(m.nombre)))
-                            .toList(),
-                        onChanged: (v) => setState(() => _mascotaId = v),
-                        validator: (v) => v == null ? 'Selecciona una mascota' : null,
+                key: _formKey,
+                child: ListView(
+                  padding: const EdgeInsets.all(20),
+                  children: [
+                    DropdownButtonFormField<int>(
+                      initialValue: _mascotaId,
+                      decoration: const InputDecoration(
+                        labelText: 'Mascota',
+                        border: OutlineInputBorder(),
                       ),
-                      const SizedBox(height: 16),
-                      DropdownButtonFormField<int>(
-                        initialValue: _vetId,
-                        decoration: const InputDecoration(
-                            labelText: 'Veterinario', border: OutlineInputBorder()),
-                        items: vets.value!
-                            .map((vt) => DropdownMenuItem(
-                                value: vt.id, child: Text(vt.nombre)))
-                            .toList(),
-                        onChanged: (v) => setState(() => _vetId = v),
-                        validator: (v) => v == null ? 'Selecciona un veterinario' : null,
+                      items:
+                          mascotas.value!
+                              .map(
+                                (m) => DropdownMenuItem(
+                                  value: m.id,
+                                  child: Text(m.nombre),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (v) => setState(() => _mascotaId = v),
+                      validator:
+                          (v) => v == null ? 'Selecciona una mascota' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButtonFormField<int>(
+                      initialValue: _vetId,
+                      decoration: const InputDecoration(
+                        labelText: 'Veterinario',
+                        border: OutlineInputBorder(),
                       ),
-                      const SizedBox(height: 16),
-                      OutlinedButton.icon(
-                        onPressed: _elegirFecha,
-                        icon: const Icon(Icons.calendar_today),
-                        label: Text(_fecha == null
+                      items:
+                          vets.value!
+                              .map(
+                                (vt) => DropdownMenuItem(
+                                  value: vt.id,
+                                  child: Text(vt.nombre),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (v) => setState(() => _vetId = v),
+                      validator:
+                          (v) => v == null ? 'Selecciona un veterinario' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    OutlinedButton.icon(
+                      onPressed: _elegirFecha,
+                      icon: const Icon(Icons.calendar_today),
+                      label: Text(
+                        _fecha == null
                             ? 'Elegir fecha'
-                            : '${_fecha!.year}-${_dd(_fecha!.month)}-${_dd(_fecha!.day)}'),
+                            : '${_fecha!.year}-${_dd(_fecha!.month)}-${_dd(_fecha!.day)}',
                       ),
-                      const SizedBox(height: 8),
-                      OutlinedButton.icon(
-                        onPressed: _elegirHora,
-                        icon: const Icon(Icons.access_time),
-                        label: Text(_hora == null ? 'Elegir hora' : _hora!.format(context)),
+                    ),
+                    const SizedBox(height: 8),
+                    OutlinedButton.icon(
+                      onPressed: _elegirHora,
+                      icon: const Icon(Icons.access_time),
+                      label: Text(
+                        _hora == null ? 'Elegir hora' : _hora!.format(context),
                       ),
-                      const SizedBox(height: 16),
-                      TextFormField(
-                        controller: _motivoCtrl,
-                        maxLines: 3,
-                        decoration: const InputDecoration(
-                            labelText: 'Motivo', border: OutlineInputBorder()),
-                        validator: (v) =>
-                            (v == null || v.trim().isEmpty) ? 'Escribe el motivo' : null,
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _motivoCtrl,
+                      maxLines: 3,
+                      decoration: const InputDecoration(
+                        labelText: 'Motivo',
+                        border: OutlineInputBorder(),
                       ),
-                      const SizedBox(height: 24),
-                      FilledButton(
-                        onPressed: _guardando ? null : _agendar,
-                        child: _guardando
-                            ? const SizedBox(
-                                height: 20, width: 20,
+                      validator:
+                          (v) =>
+                              (v == null || v.trim().isEmpty)
+                                  ? 'Escribe el motivo'
+                                  : null,
+                    ),
+                    const SizedBox(height: 24),
+                    FilledButton(
+                      onPressed: _guardando ? null : _agendar,
+                      child:
+                          _guardando
+                              ? const SizedBox(
+                                height: 20,
+                                width: 20,
                                 child: CircularProgressIndicator(
-                                    strokeWidth: 2, color: Colors.white))
-                            : const Text('Agendar cita'),
-                      ),
-                    ],
-                  ),
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              )
+                              : const Text('Agendar cita'),
+                    ),
+                  ],
                 ),
+              ),
     );
   }
 }

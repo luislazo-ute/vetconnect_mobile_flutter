@@ -9,8 +9,6 @@ import '../../providers/rol_provider.dart';
 import 'pantalla_documento_mongo_detalle.dart';
 import 'pantalla_documento_mongo_formulario.dart';
 
-/// Pantalla GENÉRICA para cualquier colección Mongo (lista + detalle + crear).
-/// Se reutiliza para monitoreo, consultas, notas de voz y tracking.
 class PantallaColeccionMongo extends ConsumerWidget {
   final ColeccionMongo config;
   const PantallaColeccionMongo({super.key, required this.config});
@@ -38,28 +36,36 @@ class PantallaColeccionMongo extends ConsumerWidget {
           if (esAdmin)
             IconButton(
               icon: const Icon(Icons.add),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) =>
-                      PantallaDocumentoMongoFormulario(config: config))),
+              onPressed:
+                  () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder:
+                          (_) =>
+                              PantallaDocumentoMongoFormulario(config: config),
+                    ),
+                  ),
             ),
         ],
       ),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('$e'),
-              const SizedBox(height: 12),
-              FilledButton(
-                onPressed: () =>
-                    ref.invalidate(documentosMongoProvider(config.coleccion)),
-                child: const Text('Reintentar'),
+        error:
+            (e, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('$e'),
+                  const SizedBox(height: 12),
+                  FilledButton(
+                    onPressed:
+                        () => ref.invalidate(
+                          documentosMongoProvider(config.coleccion),
+                        ),
+                    child: const Text('Reintentar'),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (docs) {
           if (docs.isEmpty) {
             return const Center(child: Text('No hay registros.'));
@@ -75,9 +81,16 @@ class PantallaColeccionMongo extends ConsumerWidget {
                   title: Text(_titulo(d)),
                   subtitle: Text(_subtitulo(d)),
                   trailing: const Icon(Icons.chevron_right),
-                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => PantallaDocumentoMongoDetalle(
-                          titulo: config.titulo, doc: d))),
+                  onTap:
+                      () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder:
+                              (_) => PantallaDocumentoMongoDetalle(
+                                titulo: config.titulo,
+                                doc: d,
+                              ),
+                        ),
+                      ),
                 ),
               );
             },

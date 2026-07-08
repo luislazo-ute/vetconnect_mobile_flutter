@@ -11,7 +11,6 @@ import '../../domain/repositories/i_cita_repository.dart';
 import '../dtos/cita_dto.dart';
 import '../dtos/pagina_dto.dart';
 
-/// Implementación real del repositorio de citas (endpoint privado).
 class CitaRepositoryImpl implements ICitaRepository {
   final http.Client _cliente;
 
@@ -30,7 +29,8 @@ class CitaRepositoryImpl implements ICitaRepository {
     return _envolver(() async {
       final r = await _cliente.get(uri).timeout(Constantes.timeout);
       if (r.statusCode == 200) {
-        final json = jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
+        final json =
+            jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
         return PaginaDto.fromJson(json, (i) => CitaDto.fromJson(i).toDomain());
       }
       throw ExcepcionApi('Error del servidor (${r.statusCode}).');
@@ -65,7 +65,9 @@ class CitaRepositoryImpl implements ICitaRepository {
     } on SocketException {
       throw const ExcepcionApi('Sin conexión a internet.');
     } on TimeoutException {
-      throw const ExcepcionApi('La petición tardó demasiado. Intenta de nuevo.');
+      throw const ExcepcionApi(
+        'La petición tardó demasiado. Intenta de nuevo.',
+      );
     } on FormatException {
       throw const ExcepcionApi('Respuesta inválida del servidor.');
     }

@@ -1,6 +1,5 @@
 import '../../domain/entities/mascota.dart';
 
-/// DTO: traduce el JSON de la API a la entidad Mascota.
 class MascotaDto {
   final int id;
   final String nombre;
@@ -8,7 +7,7 @@ class MascotaDto {
   final String especieDisplay;
   final String raza;
   final String? fechaNacimiento;
-  final String? peso; // llega como STRING ("18.50") o null
+  final String? peso;
   final int cliente;
   final String clienteNombre;
   final bool isActive;

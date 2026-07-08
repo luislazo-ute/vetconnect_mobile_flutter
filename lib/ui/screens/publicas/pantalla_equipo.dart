@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../../notifiers/veterinarios_notifier.dart';
 import '../../notifiers/veterinarios_state.dart';
 
-/// Pantalla pública: nuestro equipo de veterinarios (búsqueda + scroll infinito).
 class PantallaEquipo extends ConsumerStatefulWidget {
   const PantallaEquipo({super.key});
 
@@ -51,8 +50,10 @@ class _PantallaEquipoState extends ConsumerState<PantallaEquipo> {
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
               ),
-              onSubmitted: (texto) =>
-                  ref.read(veterinariosNotifierProvider.notifier).buscar(texto),
+              onSubmitted:
+                  (texto) => ref
+                      .read(veterinariosNotifierProvider.notifier)
+                      .buscar(texto),
             ),
           ),
           Expanded(child: _construirContenido(estado)),
@@ -73,8 +74,9 @@ class _PantallaEquipoState extends ConsumerState<PantallaEquipo> {
             Text(estado.error!),
             const SizedBox(height: 12),
             FilledButton(
-              onPressed: () =>
-                  ref.read(veterinariosNotifierProvider.notifier).cargar(),
+              onPressed:
+                  () =>
+                      ref.read(veterinariosNotifierProvider.notifier).cargar(),
               child: const Text('Reintentar'),
             ),
           ],
@@ -107,7 +109,6 @@ class _PantallaEquipoState extends ConsumerState<PantallaEquipo> {
             title: Text(vet.nombre),
             subtitle: Text('${vet.especialidad}\n${vet.horarioAtencion}'),
             isThreeLine: true,
-            // COMPLETAR (tú): al tocar, abre el detalle enviando el veterinario.
             onTap: () => context.pushNamed('veterinarioDetalle', extra: vet),
           ),
         );

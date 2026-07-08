@@ -11,8 +11,6 @@ import '../../domain/repositories/i_veterinario_repository.dart';
 import '../dtos/pagina_dto.dart';
 import '../dtos/veterinario_dto.dart';
 
-/// Implementación del repositorio de veterinarios. La lectura es pública; la
-/// escritura (crear/editar/eliminar) requiere el cliente autenticado (ADMIN).
 class VeterinarioRepositoryImpl implements IVeterinarioRepository {
   final http.Client _cliente;
 
@@ -34,8 +32,12 @@ class VeterinarioRepositoryImpl implements IVeterinarioRepository {
     return _envolver(() async {
       final r = await _cliente.get(uri).timeout(Constantes.timeout);
       if (r.statusCode == 200) {
-        final json = jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
-        return PaginaDto.fromJson(json, (i) => VeterinarioDto.fromJson(i).toDomain());
+        final json =
+            jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
+        return PaginaDto.fromJson(
+          json,
+          (i) => VeterinarioDto.fromJson(i).toDomain(),
+        );
       }
       throw ExcepcionApi('Error del servidor (${r.statusCode}).');
     });

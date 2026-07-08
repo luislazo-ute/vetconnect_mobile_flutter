@@ -38,14 +38,14 @@ class HistorialDto {
   }
 
   Historial toDomain() => Historial(
-        id: id,
-        mascota: mascota,
-        mascotaNombre: mascotaNombre,
-        veterinario: veterinario,
-        veterinarioNombre: veterinarioNombre,
-        fecha: fecha,
-        diagnostico: diagnostico,
-        tratamiento: tratamiento,
-        observaciones: observaciones,
-      );
+    id: id,
+    mascota: mascota,
+    mascotaNombre: mascotaNombre,
+    veterinario: veterinario,
+    veterinarioNombre: veterinarioNombre,
+    fecha: fecha,
+    diagnostico: diagnostico,
+    tratamiento: tratamiento,
+    observaciones: observaciones,
+  );
 }

@@ -1,10 +1,9 @@
-/// Entidad de dominio: un servicio veterinario. Dart puro, sin Flutter ni JSON.
 class Servicio {
   final int id;
   final String nombre;
   final String descripcion;
-  final double precio;          // ya como número (el DTO lo convierte)
-  final int duracionMinutos;    // camelCase, limpio
+  final double precio;
+  final int duracionMinutos;
   final bool isActive;
 
   const Servicio({
@@ -16,7 +15,5 @@ class Servicio {
     required this.isActive,
   });
 
-  /// Precio formateado para mostrar, ej. "$25.00". La lógica de presentación
-  /// va en getters de la entidad (convención del profe).
   String get precioFormateado => '\$${precio.toStringAsFixed(2)}';
 }

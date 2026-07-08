@@ -1,13 +1,12 @@
 import '../../domain/entities/rol.dart';
 import '../../domain/entities/usuario.dart';
 
-/// DTO del objeto "user" que devuelve el login (y el perfil).
 class UsuarioDto {
   final int id;
   final String username;
   final String email;
   final bool isStaff;
-  final String rol; // llega como String: "ADMIN"/"DOCTOR"/"USUARIO"
+  final String rol;
 
   const UsuarioDto({
     required this.id,
@@ -33,8 +32,6 @@ class UsuarioDto {
       username: username,
       email: email,
       isStaff: isStaff,
-      // COMPLETAR: convierte el string rol al enum con tu helper.
-      // Pista: Rol.desdeApi(rol)
       rol: Rol.desdeApi(rol),
     );
   }

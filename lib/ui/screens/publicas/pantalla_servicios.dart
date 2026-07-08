@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../notifiers/servicios_notifier.dart';
 import '../../notifiers/servicios_state.dart';
 
-/// Pantalla pública: listado de servicios con búsqueda y scroll infinito.
 class PantallaServicios extends ConsumerStatefulWidget {
   const PantallaServicios({super.key});
 
@@ -18,7 +17,7 @@ class _PantallaServiciosState extends ConsumerState<PantallaServicios> {
   @override
   void initState() {
     super.initState();
-    _scrollCtrl.addListener(_alHacerScroll); // escucha el scroll
+    _scrollCtrl.addListener(_alHacerScroll);
   }
 
   @override
@@ -29,7 +28,6 @@ class _PantallaServiciosState extends ConsumerState<PantallaServicios> {
 
   void _alHacerScroll() {
     final pos = _scrollCtrl.position;
-    // Si falta poco (200px) para el fondo, pide la siguiente página.
     if (pos.pixels >= pos.maxScrollExtent - 200) {
       ref.read(serviciosNotifierProvider.notifier).cargarMas();
     }
@@ -37,14 +35,12 @@ class _PantallaServiciosState extends ConsumerState<PantallaServicios> {
 
   @override
   Widget build(BuildContext context) {
-    // watch: reconstruye cuando el estado cambia.
     final estado = ref.watch(serviciosNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Servicios')),
       body: Column(
         children: [
-          // --- Buscador ---
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextField(
@@ -53,9 +49,10 @@ class _PantallaServiciosState extends ConsumerState<PantallaServicios> {
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
               ),
-              // Al enviar (Enter): dispara la búsqueda.
-              onSubmitted: (texto) =>
-                  ref.read(serviciosNotifierProvider.notifier).buscar(texto),
+              onSubmitted:
+                  (texto) => ref
+                      .read(serviciosNotifierProvider.notifier)
+                      .buscar(texto),
             ),
           ),
           Expanded(child: _construirContenido(estado)),
@@ -65,11 +62,9 @@ class _PantallaServiciosState extends ConsumerState<PantallaServicios> {
   }
 
   Widget _construirContenido(ServiciosState estado) {
-    // 1) Primera carga.
     if (estado.cargando) {
       return const Center(child: CircularProgressIndicator());
     }
-    // 2) Error sin datos.
     if (estado.error != null && estado.servicios.isEmpty) {
       return Center(
         child: Column(
@@ -78,19 +73,17 @@ class _PantallaServiciosState extends ConsumerState<PantallaServicios> {
             Text(estado.error!),
             const SizedBox(height: 12),
             FilledButton(
-              onPressed: () =>
-                  ref.read(serviciosNotifierProvider.notifier).cargar(),
+              onPressed:
+                  () => ref.read(serviciosNotifierProvider.notifier).cargar(),
               child: const Text('Reintentar'),
             ),
           ],
         ),
       );
     }
-    // 3) Vacío.
     if (estado.servicios.isEmpty) {
       return const Center(child: Text('No hay servicios.'));
     }
-    // 4) Lista + spinner de "cargando más".
     return ListView.builder(
       controller: _scrollCtrl,
       padding: const EdgeInsets.all(16),

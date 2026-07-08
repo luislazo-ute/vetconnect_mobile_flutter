@@ -1,4 +1,3 @@
-/// Entidad de dominio: un historial médico. Dart puro.
 class Historial {
   final int id;
   final int mascota;

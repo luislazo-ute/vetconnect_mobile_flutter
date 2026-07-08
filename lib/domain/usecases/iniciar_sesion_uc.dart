@@ -7,8 +7,6 @@ class IniciarSesionUc {
   IniciarSesionUc(this._repo);
 
   Future<(TokensAuth, Usuario)> call(String username, String password) {
-    // COMPLETAR: delega en el repo.
-    // Pista: return _repo.iniciarSesion(username, password);
     return _repo.iniciarSesion(username, password);
   }
 }

@@ -1,6 +1,5 @@
 import '../../domain/entities/cita.dart';
 
-/// Estado inmutable de la lista de citas.
 class CitasState {
   final List<Cita> citas;
   final bool cargando;

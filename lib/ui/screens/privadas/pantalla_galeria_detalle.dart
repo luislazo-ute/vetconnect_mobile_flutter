@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../domain/entities/galeria_foto.dart';
 
-/// Detalle de una foto de la galería, con Hero desde la grilla.
 class PantallaGaleriaDetalle extends StatelessWidget {
   final GaleriaFoto foto;
   const PantallaGaleriaDetalle({super.key, required this.foto});
@@ -20,12 +19,16 @@ class PantallaGaleriaDetalle extends StatelessWidget {
               width: double.infinity,
               height: 320,
               fit: BoxFit.cover,
-              // Si la URL falla, mostramos un placeholder en vez de romper.
-              errorBuilder: (context, error, stack) => Container(
-                height: 320,
-                color: Colors.grey.shade200,
-                child: const Icon(Icons.broken_image, size: 64, color: Colors.grey),
-              ),
+              errorBuilder:
+                  (context, error, stack) => Container(
+                    height: 320,
+                    color: Colors.grey.shade200,
+                    child: const Icon(
+                      Icons.broken_image,
+                      size: 64,
+                      color: Colors.grey,
+                    ),
+                  ),
             ),
           ),
           Padding(

@@ -5,8 +5,6 @@ import '../../../core/errores.dart';
 import '../../../domain/entities/cliente.dart';
 import '../../providers/cliente_providers.dart';
 
-/// Gestión de clientes (ADMIN): editar teléfono/dirección y eliminar.
-/// (Crear un cliente requiere una cuenta de usuario, por eso no se incluye aquí.)
 class PantallaClientesAdmin extends ConsumerWidget {
   const PantallaClientesAdmin({super.key});
 
@@ -17,36 +15,45 @@ class PantallaClientesAdmin extends ConsumerWidget {
 
     final guardar = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text('Editar ${c.username}'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: telCtrl,
-              decoration: const InputDecoration(labelText: 'Teléfono'),
+      builder:
+          (ctx) => AlertDialog(
+            title: Text('Editar ${c.username}'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: telCtrl,
+                  decoration: const InputDecoration(labelText: 'Teléfono'),
+                ),
+                TextField(
+                  controller: dirCtrl,
+                  decoration: const InputDecoration(labelText: 'Dirección'),
+                ),
+              ],
             ),
-            TextField(
-              controller: dirCtrl,
-              decoration: const InputDecoration(labelText: 'Dirección'),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
-          FilledButton(
-              onPressed: () => Navigator.pop(ctx, true), child: const Text('Guardar')),
-        ],
-      ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Cancelar'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Guardar'),
+              ),
+            ],
+          ),
     );
 
     if (guardar == true) {
       try {
-        await ref.read(actualizarClienteUcProvider)(
-            c.id, {'telefono': telCtrl.text.trim(), 'direccion': dirCtrl.text.trim()});
+        await ref.read(actualizarClienteUcProvider)(c.id, {
+          'telefono': telCtrl.text.trim(),
+          'direccion': dirCtrl.text.trim(),
+        });
         ref.invalidate(clientesProvider);
-        messenger.showSnackBar(const SnackBar(content: Text('Cliente actualizado')));
+        messenger.showSnackBar(
+          const SnackBar(content: Text('Cliente actualizado')),
+        );
       } on ExcepcionApi catch (e) {
         messenger.showSnackBar(
           SnackBar(content: Text(e.mensaje), backgroundColor: Colors.red),
@@ -61,22 +68,29 @@ class PantallaClientesAdmin extends ConsumerWidget {
     final messenger = ScaffoldMessenger.of(context);
     final ok = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Eliminar cliente'),
-        content: Text('¿Eliminar a ${c.username}?'),
-        actions: [
-          TextButton(
-              onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
-          FilledButton(
-              onPressed: () => Navigator.pop(ctx, true), child: const Text('Eliminar')),
-        ],
-      ),
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text('Eliminar cliente'),
+            content: Text('¿Eliminar a ${c.username}?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Cancelar'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Eliminar'),
+              ),
+            ],
+          ),
     );
     if (ok != true) return;
     try {
       await ref.read(eliminarClienteUcProvider)(c.id);
       ref.invalidate(clientesProvider);
-      messenger.showSnackBar(const SnackBar(content: Text('Cliente eliminado')));
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Cliente eliminado')),
+      );
     } on ExcepcionApi catch (e) {
       messenger.showSnackBar(
         SnackBar(content: Text(e.mensaje), backgroundColor: Colors.red),
@@ -92,19 +106,20 @@ class PantallaClientesAdmin extends ConsumerWidget {
       appBar: AppBar(title: const Text('Gestión de clientes')),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('$e'),
-              const SizedBox(height: 12),
-              FilledButton(
-                onPressed: () => ref.invalidate(clientesProvider),
-                child: const Text('Reintentar'),
+        error:
+            (e, _) => Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('$e'),
+                  const SizedBox(height: 12),
+                  FilledButton(
+                    onPressed: () => ref.invalidate(clientesProvider),
+                    child: const Text('Reintentar'),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
         data: (clientes) {
           if (clientes.isEmpty) {
             return const Center(child: Text('No hay clientes.'));
@@ -120,13 +135,19 @@ class PantallaClientesAdmin extends ConsumerWidget {
                   title: Text(c.username),
                   subtitle: Text('${c.telefono} · ${c.direccion}'),
                   trailing: PopupMenuButton<String>(
-                    onSelected: (op) => op == 'editar'
-                        ? _editar(context, ref, c)
-                        : _eliminar(context, ref, c),
-                    itemBuilder: (_) => const [
-                      PopupMenuItem(value: 'editar', child: Text('Editar')),
-                      PopupMenuItem(value: 'eliminar', child: Text('Eliminar')),
-                    ],
+                    onSelected:
+                        (op) =>
+                            op == 'editar'
+                                ? _editar(context, ref, c)
+                                : _eliminar(context, ref, c),
+                    itemBuilder:
+                        (_) => const [
+                          PopupMenuItem(value: 'editar', child: Text('Editar')),
+                          PopupMenuItem(
+                            value: 'eliminar',
+                            child: Text('Eliminar'),
+                          ),
+                        ],
                   ),
                 ),
               );

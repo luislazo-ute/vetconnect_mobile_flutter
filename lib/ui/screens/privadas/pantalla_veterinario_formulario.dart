@@ -6,7 +6,6 @@ import '../../../domain/entities/veterinario.dart';
 import '../../notifiers/veterinarios_notifier.dart';
 import '../../providers/veterinario_providers.dart';
 
-/// Formulario para crear/editar un veterinario (ADMIN).
 class PantallaVeterinarioFormulario extends ConsumerStatefulWidget {
   final Veterinario? veterinario;
   const PantallaVeterinarioFormulario({super.key, this.veterinario});
@@ -60,15 +59,23 @@ class _State extends ConsumerState<PantallaVeterinarioFormulario> {
     final messenger = ScaffoldMessenger.of(context);
     try {
       if (_esEdicion) {
-        await ref.read(actualizarVeterinarioUcProvider)(widget.veterinario!.id, datos);
+        await ref.read(actualizarVeterinarioUcProvider)(
+          widget.veterinario!.id,
+          datos,
+        );
       } else {
         await ref.read(crearVeterinarioUcProvider)(datos);
       }
       ref.read(veterinariosNotifierProvider.notifier).cargar();
       if (mounted) {
         Navigator.of(context).pop();
-        messenger.showSnackBar(SnackBar(
-            content: Text(_esEdicion ? 'Veterinario actualizado' : 'Veterinario creado')));
+        messenger.showSnackBar(
+          SnackBar(
+            content: Text(
+              _esEdicion ? 'Veterinario actualizado' : 'Veterinario creado',
+            ),
+          ),
+        );
       }
     } on ExcepcionApi catch (e) {
       if (mounted) setState(() => _guardando = false);
@@ -81,7 +88,9 @@ class _State extends ConsumerState<PantallaVeterinarioFormulario> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_esEdicion ? 'Editar veterinario' : 'Nuevo veterinario')),
+      appBar: AppBar(
+        title: Text(_esEdicion ? 'Editar veterinario' : 'Nuevo veterinario'),
+      ),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -90,21 +99,33 @@ class _State extends ConsumerState<PantallaVeterinarioFormulario> {
             _campo(_nombre, 'Nombre', obligatorio: true),
             _campo(_especialidad, 'Especialidad', obligatorio: true),
             _campo(_telefono, 'Teléfono'),
-            _campo(_email, 'Email',
-                tipo: TextInputType.emailAddress,
-                validador: (v) => (v != null && v.isNotEmpty && !v.contains('@'))
-                    ? 'Email inválido'
-                    : null),
+            _campo(
+              _email,
+              'Email',
+              tipo: TextInputType.emailAddress,
+              validador:
+                  (v) =>
+                      (v != null && v.isNotEmpty && !v.contains('@'))
+                          ? 'Email inválido'
+                          : null,
+            ),
             _campo(_horario, 'Horario de atención'),
             const SizedBox(height: 8),
             FilledButton(
               onPressed: _guardando ? null : _guardar,
-              child: _guardando
-                  ? const SizedBox(
-                      height: 20, width: 20,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white))
-                  : Text(_esEdicion ? 'Guardar cambios' : 'Crear veterinario'),
+              child:
+                  _guardando
+                      ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                      : Text(
+                        _esEdicion ? 'Guardar cambios' : 'Crear veterinario',
+                      ),
             ),
           ],
         ),
@@ -112,19 +133,29 @@ class _State extends ConsumerState<PantallaVeterinarioFormulario> {
     );
   }
 
-  Widget _campo(TextEditingController ctrl, String label,
-      {bool obligatorio = false,
-      TextInputType? tipo,
-      String? Function(String?)? validador}) {
+  Widget _campo(
+    TextEditingController ctrl,
+    String label, {
+    bool obligatorio = false,
+    TextInputType? tipo,
+    String? Function(String?)? validador,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: TextFormField(
         controller: ctrl,
         keyboardType: tipo,
-        decoration: InputDecoration(labelText: label, border: const OutlineInputBorder()),
-        validator: validador ??
+        decoration: InputDecoration(
+          labelText: label,
+          border: const OutlineInputBorder(),
+        ),
+        validator:
+            validador ??
             (obligatorio
-                ? (v) => (v == null || v.trim().isEmpty) ? '$label obligatorio' : null
+                ? (v) =>
+                    (v == null || v.trim().isEmpty)
+                        ? '$label obligatorio'
+                        : null
                 : null),
       ),
     );

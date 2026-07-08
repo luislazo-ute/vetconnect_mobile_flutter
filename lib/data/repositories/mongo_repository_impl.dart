@@ -10,7 +10,6 @@ import '../../domain/entities/documento_mongo.dart';
 import '../../domain/repositories/i_mongo_repository.dart';
 import '../dtos/documento_mongo_dto.dart';
 
-/// Implementación genérica para colecciones MongoDB (lista plana, sin paginar).
 class MongoRepositoryImpl implements IMongoRepository {
   final http.Client _cliente;
 

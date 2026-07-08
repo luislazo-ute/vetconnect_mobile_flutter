@@ -9,9 +9,7 @@ final mongoRepositoryProvider = Provider<IMongoRepository>((ref) {
   return MongoRepositoryImpl(ref.watch(clienteAutenticadoProvider));
 });
 
-/// Documentos de UNA colección. `.family` = un provider parametrizado por el
-/// nombre de la colección ('monitoreo', 'consultas', ...).
 final documentosMongoProvider =
     FutureProvider.family<List<DocumentoMongo>, String>((ref, coleccion) {
-  return ref.watch(mongoRepositoryProvider).obtener(coleccion);
-});
+      return ref.watch(mongoRepositoryProvider).obtener(coleccion);
+    });

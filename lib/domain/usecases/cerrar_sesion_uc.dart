@@ -5,8 +5,6 @@ class CerrarSesionUc {
   CerrarSesionUc(this._repo);
 
   Future<void> call(String refresh) {
-    // COMPLETAR: delega en _repo.cerrarSesion(refresh);
     return _repo.cerrarSesion(refresh);
   }
 }
-    

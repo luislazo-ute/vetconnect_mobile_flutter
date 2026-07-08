@@ -11,13 +11,13 @@ final clienteRepositoryProvider = Provider<IClienteRepository>((ref) {
   return ClienteRepositoryImpl(ref.watch(clienteAutenticadoProvider));
 });
 
-/// FutureProvider: expone la lista de clientes de forma asíncrona.
-/// La UI la lee con .when(data/loading/error). Perfecto para dropdowns y gestión.
 final clientesProvider = FutureProvider<List<Cliente>>((ref) {
   return ref.watch(clienteRepositoryProvider).obtenerClientes();
 });
 
-final actualizarClienteUcProvider =
-    Provider((ref) => ActualizarClienteUc(ref.watch(clienteRepositoryProvider)));
-final eliminarClienteUcProvider =
-    Provider((ref) => EliminarClienteUc(ref.watch(clienteRepositoryProvider)));
+final actualizarClienteUcProvider = Provider(
+  (ref) => ActualizarClienteUc(ref.watch(clienteRepositoryProvider)),
+);
+final eliminarClienteUcProvider = Provider(
+  (ref) => EliminarClienteUc(ref.watch(clienteRepositoryProvider)),
+);

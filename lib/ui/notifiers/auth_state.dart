@@ -1,13 +1,11 @@
 import '../../domain/entities/usuario.dart';
 
-/// Momentos posibles de la sesión.
 enum EstadoSesion { desconocido, autenticado, noAutenticado }
 
-/// Estado inmutable de autenticación.
 class EstadoAuth {
   final EstadoSesion sesion;
-  final Usuario? usuario; // el usuario logueado (null si no hay sesión)
-  final bool cargando;    // true mientras se procesa el login
+  final Usuario? usuario;
+  final bool cargando;
   final String? error;
 
   const EstadoAuth({

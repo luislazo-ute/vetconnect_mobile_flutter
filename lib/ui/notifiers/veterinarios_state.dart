@@ -1,6 +1,5 @@
 import '../../domain/entities/veterinario.dart';
 
-/// Estado inmutable de la pantalla de veterinarios (gemelo de ServiciosState).
 class VeterinariosState {
   final List<Veterinario> veterinarios;
   final bool cargando;

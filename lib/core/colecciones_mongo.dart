@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
-/// Un campo editable de una colección Mongo (para el formulario de crear).
 class CampoMongo {
-  final String clave; // nombre real del campo en Mongo (ej. 'mascota_id')
-  final String etiqueta; // texto para el usuario
-  final bool numero; // si es numérico (se envía como número)
+  final String clave;
+  final String etiqueta;
+  final bool numero;
 
   const CampoMongo(this.clave, this.etiqueta, {this.numero = false});
 }
 
-/// Configuración de una colección Mongo: título, endpoint, ícono y campos.
 class ColeccionMongo {
   final String titulo;
-  final String coleccion; // segmento del endpoint: /api/mongo/<coleccion>/
+  final String coleccion;
   final IconData icono;
   final List<CampoMongo> campos;
 
@@ -24,7 +22,6 @@ class ColeccionMongo {
   });
 }
 
-/// Las 4 colecciones Mongo (además de la galería, que tiene su propia pantalla).
 const List<ColeccionMongo> coleccionesMongo = [
   ColeccionMongo(
     titulo: 'Monitoreo de signos',

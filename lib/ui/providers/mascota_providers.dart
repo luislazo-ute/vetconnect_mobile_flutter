@@ -8,18 +8,20 @@ import '../../domain/usecases/eliminar_mascota_uc.dart';
 import '../../domain/usecases/obtener_mascotas_uc.dart';
 import 'cliente_autenticado_provider.dart';
 
-/// Repositorio de mascotas: usa el cliente AUTENTICADO (endpoint privado).
 final mascotaRepositoryProvider = Provider<IMascotaRepository>((ref) {
   final cliente = ref.watch(clienteAutenticadoProvider);
   return MascotaRepositoryImpl(cliente);
 });
 
-// --- Use cases ---
-final obtenerMascotasUcProvider =
-    Provider((ref) => ObtenerMascotasUc(ref.watch(mascotaRepositoryProvider)));
-final crearMascotaUcProvider =
-    Provider((ref) => CrearMascotaUc(ref.watch(mascotaRepositoryProvider)));
-final actualizarMascotaUcProvider =
-    Provider((ref) => ActualizarMascotaUc(ref.watch(mascotaRepositoryProvider)));
-final eliminarMascotaUcProvider =
-    Provider((ref) => EliminarMascotaUc(ref.watch(mascotaRepositoryProvider)));
+final obtenerMascotasUcProvider = Provider(
+  (ref) => ObtenerMascotasUc(ref.watch(mascotaRepositoryProvider)),
+);
+final crearMascotaUcProvider = Provider(
+  (ref) => CrearMascotaUc(ref.watch(mascotaRepositoryProvider)),
+);
+final actualizarMascotaUcProvider = Provider(
+  (ref) => ActualizarMascotaUc(ref.watch(mascotaRepositoryProvider)),
+);
+final eliminarMascotaUcProvider = Provider(
+  (ref) => EliminarMascotaUc(ref.watch(mascotaRepositoryProvider)),
+);

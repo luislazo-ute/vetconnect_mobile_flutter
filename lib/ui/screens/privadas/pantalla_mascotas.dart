@@ -10,8 +10,6 @@ import '../../providers/mascota_providers.dart';
 import '../../providers/rol_provider.dart';
 import 'pantalla_mascota_formulario.dart';
 
-/// Lista de mascotas (pestaña Pacientes). Búsqueda + scroll infinito.
-/// El botón "Agregar" solo aparece para ADMIN.
 class PantallaMascotas extends ConsumerStatefulWidget {
   const PantallaMascotas({super.key});
 
@@ -39,40 +37,41 @@ class _PantallaMascotasState extends ConsumerState<PantallaMascotas> {
     super.dispose();
   }
 
-  /// Abre el formulario. Si `m` es null → crear; si trae mascota → editar.
   void _abrirFormulario([Mascota? m]) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (_) => PantallaMascotaFormulario(mascota: m)),
     );
   }
 
-  /// Diálogo de confirmación + eliminación (solo lo llama el admin).
   Future<void> _confirmarEliminar(Mascota m) async {
     final confirmado = await showDialog<bool>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Eliminar mascota'),
-        content: Text('¿Seguro que quieres eliminar a ${m.nombre}?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancelar'),
+      builder:
+          (ctx) => AlertDialog(
+            title: const Text('Eliminar mascota'),
+            content: Text('¿Seguro que quieres eliminar a ${m.nombre}?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx, false),
+                child: const Text('Cancelar'),
+              ),
+              FilledButton(
+                onPressed: () => Navigator.pop(ctx, true),
+                child: const Text('Eliminar'),
+              ),
+            ],
           ),
-          FilledButton(
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Eliminar'),
-          ),
-        ],
-      ),
     );
     if (confirmado != true) return;
-    if (!mounted) return; // el widget pudo desmontarse mientras el diálogo estaba abierto
+    if (!mounted) return;
 
     final messenger = ScaffoldMessenger.of(context);
     try {
       await ref.read(eliminarMascotaUcProvider)(m.id);
       ref.read(mascotasNotifierProvider.notifier).cargar();
-      messenger.showSnackBar(const SnackBar(content: Text('Mascota eliminada')));
+      messenger.showSnackBar(
+        const SnackBar(content: Text('Mascota eliminada')),
+      );
     } on ExcepcionApi catch (e) {
       messenger.showSnackBar(
         SnackBar(content: Text(e.mensaje), backgroundColor: Colors.red),
@@ -89,15 +88,17 @@ class _PantallaMascotasState extends ConsumerState<PantallaMascotas> {
     return SafeArea(
       child: Column(
         children: [
-          // Encabezado: título + "Agregar" (solo ADMIN).
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Mascotas',
-                    style: textos.headlineSmall
-                        ?.copyWith(fontWeight: FontWeight.bold)),
+                Text(
+                  'Mascotas',
+                  style: textos.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 if (esAdmin)
                   TextButton.icon(
                     onPressed: () => _abrirFormulario(),
@@ -107,7 +108,6 @@ class _PantallaMascotasState extends ConsumerState<PantallaMascotas> {
               ],
             ),
           ),
-          // Buscador.
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: TextField(
@@ -116,8 +116,8 @@ class _PantallaMascotasState extends ConsumerState<PantallaMascotas> {
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
               ),
-              onSubmitted: (t) =>
-                  ref.read(mascotasNotifierProvider.notifier).buscar(t),
+              onSubmitted:
+                  (t) => ref.read(mascotasNotifierProvider.notifier).buscar(t),
             ),
           ),
           const SizedBox(height: 8),
@@ -139,7 +139,8 @@ class _PantallaMascotasState extends ConsumerState<PantallaMascotas> {
             Text(estado.error!),
             const SizedBox(height: 12),
             FilledButton(
-              onPressed: () => ref.read(mascotasNotifierProvider.notifier).cargar(),
+              onPressed:
+                  () => ref.read(mascotasNotifierProvider.notifier).cargar(),
               child: const Text('Reintentar'),
             ),
           ],
@@ -151,7 +152,7 @@ class _PantallaMascotasState extends ConsumerState<PantallaMascotas> {
     }
     return ListView.builder(
       controller: _scrollCtrl,
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 100), // aire para el nav
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 100),
       itemCount: estado.mascotas.length + (estado.cargandoMas ? 1 : 0),
       itemBuilder: (context, i) {
         if (i >= estado.mascotas.length) {
@@ -166,23 +167,32 @@ class _PantallaMascotasState extends ConsumerState<PantallaMascotas> {
             leading: const CircleAvatar(child: Icon(Icons.pets)),
             title: Text(m.nombre),
             subtitle: Text('${m.especieDisplay} · ${m.raza} · ${m.pesoTexto}'),
-            // Admin: menú Editar/Eliminar. Otros: solo el nombre del dueño.
-            trailing: esAdmin
-                ? PopupMenuButton<String>(
-                    onSelected: (opcion) {
-                      if (opcion == 'editar') {
-                        _abrirFormulario(m);
-                      } else if (opcion == 'eliminar') {
-                        _confirmarEliminar(m);
-                      }
-                    },
-                    itemBuilder: (_) => const [
-                      PopupMenuItem(value: 'editar', child: Text('Editar')),
-                      PopupMenuItem(value: 'eliminar', child: Text('Eliminar')),
-                    ],
-                  )
-                : Text(m.clienteNombre,
-                    style: const TextStyle(color: Colors.grey, fontSize: 12)),
+            trailing:
+                esAdmin
+                    ? PopupMenuButton<String>(
+                      onSelected: (opcion) {
+                        if (opcion == 'editar') {
+                          _abrirFormulario(m);
+                        } else if (opcion == 'eliminar') {
+                          _confirmarEliminar(m);
+                        }
+                      },
+                      itemBuilder:
+                          (_) => const [
+                            PopupMenuItem(
+                              value: 'editar',
+                              child: Text('Editar'),
+                            ),
+                            PopupMenuItem(
+                              value: 'eliminar',
+                              child: Text('Eliminar'),
+                            ),
+                          ],
+                    )
+                    : Text(
+                      m.clienteNombre,
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
           ),
         );
       },

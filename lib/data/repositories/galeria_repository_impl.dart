@@ -10,8 +10,6 @@ import '../../domain/entities/galeria_foto.dart';
 import '../../domain/repositories/i_galeria_repository.dart';
 import '../dtos/galeria_foto_dto.dart';
 
-/// Implementación real de la galería (MongoDB). OJO: la respuesta es una
-/// LISTA PLANA (sin count/next/results), por eso no usamos PaginaDto.
 class GaleriaRepositoryImpl implements IGaleriaRepository {
   final http.Client _cliente;
 
@@ -27,7 +25,10 @@ class GaleriaRepositoryImpl implements IGaleriaRepository {
       if (r.statusCode == 200) {
         final lista = jsonDecode(utf8.decode(r.bodyBytes)) as List;
         return lista
-            .map((e) => GaleriaFotoDto.fromJson(e as Map<String, dynamic>).toDomain())
+            .map(
+              (e) =>
+                  GaleriaFotoDto.fromJson(e as Map<String, dynamic>).toDomain(),
+            )
             .toList();
       }
       throw ExcepcionApi('Error del servidor (${r.statusCode}).');

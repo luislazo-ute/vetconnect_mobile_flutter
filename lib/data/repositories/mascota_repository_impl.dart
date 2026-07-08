@@ -11,9 +11,8 @@ import '../../domain/repositories/i_mascota_repository.dart';
 import '../dtos/mascota_dto.dart';
 import '../dtos/pagina_dto.dart';
 
-/// Implementación real del repositorio de mascotas (endpoint privado).
 class MascotaRepositoryImpl implements IMascotaRepository {
-  final http.Client _cliente; // ← clienteAutenticado (Bearer + 401)
+  final http.Client _cliente;
 
   MascotaRepositoryImpl(this._cliente);
 
@@ -33,8 +32,12 @@ class MascotaRepositoryImpl implements IMascotaRepository {
     return _envolver(() async {
       final r = await _cliente.get(uri).timeout(Constantes.timeout);
       if (r.statusCode == 200) {
-        final json = jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
-        return PaginaDto.fromJson(json, (i) => MascotaDto.fromJson(i).toDomain());
+        final json =
+            jsonDecode(utf8.decode(r.bodyBytes)) as Map<String, dynamic>;
+        return PaginaDto.fromJson(
+          json,
+          (i) => MascotaDto.fromJson(i).toDomain(),
+        );
       }
       throw ExcepcionApi('Error del servidor (${r.statusCode}).');
     });
@@ -77,20 +80,20 @@ class MascotaRepositoryImpl implements IMascotaRepository {
     });
   }
 
-  /// Envuelve una operación de red mapeando los errores comunes a ExcepcionApi.
   Future<T> _envolver<T>(Future<T> Function() operacion) async {
     try {
       return await operacion();
     } on SocketException {
       throw const ExcepcionApi('Sin conexión a internet.');
     } on TimeoutException {
-      throw const ExcepcionApi('La petición tardó demasiado. Intenta de nuevo.');
+      throw const ExcepcionApi(
+        'La petición tardó demasiado. Intenta de nuevo.',
+      );
     } on FormatException {
       throw const ExcepcionApi('Respuesta inválida del servidor.');
     }
   }
 
-  /// Intenta extraer un mensaje útil del cuerpo de error de DRF.
   String _mensajeError(http.Response r) {
     if (r.statusCode == 403) return 'No tienes permiso para esta acción.';
     if (r.statusCode == 401) return 'Sesión expirada. Inicia sesión de nuevo.';

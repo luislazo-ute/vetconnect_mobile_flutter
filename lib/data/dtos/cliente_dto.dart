@@ -23,9 +23,9 @@ class ClienteDto {
   }
 
   Cliente toDomain() => Cliente(
-        id: id,
-        username: username,
-        telefono: telefono,
-        direccion: direccion,
-      );
+    id: id,
+    username: username,
+    telefono: telefono,
+    direccion: direccion,
+  );
 }

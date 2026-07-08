@@ -5,8 +5,6 @@ import '../../../core/colecciones_mongo.dart';
 import '../../../core/errores.dart';
 import '../../providers/mongo_providers.dart';
 
-/// Formulario genérico para crear un documento en cualquier colección Mongo,
-/// construido a partir de la configuración `config.campos` (solo ADMIN).
 class PantallaDocumentoMongoFormulario extends ConsumerStatefulWidget {
   final ColeccionMongo config;
   const PantallaDocumentoMongoFormulario({super.key, required this.config});
@@ -23,8 +21,9 @@ class _State extends ConsumerState<PantallaDocumentoMongoFormulario> {
   @override
   void initState() {
     super.initState();
-    // Un controlador por campo configurado.
-    _ctrls = {for (final c in widget.config.campos) c.clave: TextEditingController()};
+    _ctrls = {
+      for (final c in widget.config.campos) c.clave: TextEditingController(),
+    };
   }
 
   @override
@@ -39,7 +38,6 @@ class _State extends ConsumerState<PantallaDocumentoMongoFormulario> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _guardando = true);
 
-    // Construimos el cuerpo según el tipo de cada campo.
     final datos = <String, dynamic>{};
     for (final campo in widget.config.campos) {
       final txt = _ctrls[campo.clave]!.text.trim();
@@ -54,7 +52,9 @@ class _State extends ConsumerState<PantallaDocumentoMongoFormulario> {
       ref.invalidate(documentosMongoProvider(widget.config.coleccion));
       if (mounted) {
         Navigator.of(context).pop();
-        messenger.showSnackBar(const SnackBar(content: Text('Registro creado')));
+        messenger.showSnackBar(
+          const SnackBar(content: Text('Registro creado')),
+        );
       }
     } on ExcepcionApi catch (e) {
       if (mounted) setState(() => _guardando = false);
@@ -79,7 +79,9 @@ class _State extends ConsumerState<PantallaDocumentoMongoFormulario> {
                 keyboardType:
                     campo.numero ? TextInputType.number : TextInputType.text,
                 decoration: InputDecoration(
-                    labelText: campo.etiqueta, border: const OutlineInputBorder()),
+                  labelText: campo.etiqueta,
+                  border: const OutlineInputBorder(),
+                ),
                 validator: (v) {
                   if (v == null || v.trim().isEmpty) return 'Campo obligatorio';
                   if (campo.numero && num.tryParse(v.trim()) == null) {
@@ -92,12 +94,17 @@ class _State extends ConsumerState<PantallaDocumentoMongoFormulario> {
             ],
             FilledButton(
               onPressed: _guardando ? null : _guardar,
-              child: _guardando
-                  ? const SizedBox(
-                      height: 20, width: 20,
-                      child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white))
-                  : const Text('Crear'),
+              child:
+                  _guardando
+                      ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                      : const Text('Crear'),
             ),
           ],
         ),

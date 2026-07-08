@@ -8,7 +8,6 @@ import '../../notifiers/historiales_state.dart';
 import '../../providers/rol_provider.dart';
 import 'pantalla_historial_formulario.dart';
 
-/// Lista de historiales médicos. DOCTOR/ADMIN pueden crear y editar.
 class PantallaHistoriales extends ConsumerStatefulWidget {
   const PantallaHistoriales({super.key});
 
@@ -37,8 +36,11 @@ class _State extends ConsumerState<PantallaHistoriales> {
   }
 
   void _abrirFormulario([Historial? h]) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => PantallaHistorialFormulario(historial: h)));
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => PantallaHistorialFormulario(historial: h),
+      ),
+    );
   }
 
   @override
@@ -74,7 +76,8 @@ class _State extends ConsumerState<PantallaHistoriales> {
             Text(estado.error!),
             const SizedBox(height: 12),
             FilledButton(
-              onPressed: () => ref.read(historialesNotifierProvider.notifier).cargar(),
+              onPressed:
+                  () => ref.read(historialesNotifierProvider.notifier).cargar(),
               child: const Text('Reintentar'),
             ),
           ],
@@ -98,15 +101,18 @@ class _State extends ConsumerState<PantallaHistoriales> {
         final h = estado.historiales[i];
         return Card(
           child: ListTile(
-            leading: const CircleAvatar(child: Icon(Icons.description_outlined)),
+            leading: const CircleAvatar(
+              child: Icon(Icons.description_outlined),
+            ),
             title: Text('${h.mascotaNombre} · ${h.fechaCorta}'),
             subtitle: Text(h.diagnostico),
-            trailing: puedeEscribir
-                ? IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    onPressed: () => _abrirFormulario(h),
-                  )
-                : null,
+            trailing:
+                puedeEscribir
+                    ? IconButton(
+                      icon: const Icon(Icons.edit_outlined),
+                      onPressed: () => _abrirFormulario(h),
+                    )
+                    : null,
           ),
         );
       },
