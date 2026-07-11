@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>VetConnect necesita acceso a tus fotos para agregar imágenes a la galería de tu mascota.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>VetConnect necesita acceso a la cámara para tomar fotos de tu mascota.</string>
 </dict>
 </plist>

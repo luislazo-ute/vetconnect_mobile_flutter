@@ -1,10 +1,20 @@
 // Imágenes empaquetadas en assets (sin enlaces web en tiempo de ejecución).
+import 'dart:convert';
+
 import 'package:flutter/widgets.dart';
 
-// Renderiza un asset local si la referencia empieza con 'assets/',
-// de lo contrario cae a red (compatibilidad hacia atrás).
-ImageProvider proveedorImagen(String ref) =>
-    ref.startsWith('assets/') ? AssetImage(ref) : NetworkImage(ref);
+// Resuelve una referencia de imagen a su proveedor:
+//  - 'assets/...'        → imagen empaquetada
+//  - 'data:image;base64' → foto subida por el usuario (guardada en base64)
+//  - resto               → red (compatibilidad hacia atrás)
+ImageProvider proveedorImagen(String ref) {
+  if (ref.startsWith('assets/')) return AssetImage(ref);
+  if (ref.startsWith('data:image')) {
+    final base64Str = ref.substring(ref.indexOf(',') + 1);
+    return MemoryImage(base64Decode(base64Str));
+  }
+  return NetworkImage(ref);
+}
 
 // Fotos de muestra empaquetadas, para la galería (sin URLs web).
 const List<({String etiqueta, String ruta})> fotosDisponibles = [
