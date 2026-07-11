@@ -131,7 +131,7 @@ class PantallaClientesAdmin extends ConsumerWidget {
               final c = clientes[i];
               return Card(
                 child: ListTile(
-                  leading: const CircleAvatar(child: Icon(Icons.person)),
+                  leading: const CircleAvatar(child: Icon(Icons.person_outline)),
                   title: Text(c.username),
                   subtitle: Text('${c.telefono} · ${c.direccion}'),
                   trailing: PopupMenuButton<String>(

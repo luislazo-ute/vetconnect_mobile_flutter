@@ -173,7 +173,7 @@ class _PantallaServiciosAdminState extends ConsumerState<PantallaServiciosAdmin>
         return Card(
           child: ListTile(
             onTap: () => _abrirDetalle(s),
-            leading: const CircleAvatar(child: Icon(Icons.medical_services)),
+            leading: const CircleAvatar(child: Icon(Icons.medical_services_outlined)),
             title: Text(s.nombre),
             subtitle: Text('${s.duracionMinutos} min · ${s.precioFormateado}'),
             trailing: esAdmin

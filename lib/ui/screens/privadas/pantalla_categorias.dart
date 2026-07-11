@@ -172,7 +172,7 @@ class _PantallaCategoriasState extends ConsumerState<PantallaCategorias> {
         return Card(
           child: ListTile(
             onTap: () => _abrirDetalle(c),
-            leading: const CircleAvatar(child: Icon(Icons.category)),
+            leading: const CircleAvatar(child: Icon(Icons.category_outlined)),
             title: Text(c.nombre),
             subtitle: Text(c.descripcion.isNotEmpty ? c.descripcion : 'Sin descripción'),
             trailing: esAdmin

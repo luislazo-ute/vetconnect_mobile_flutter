@@ -182,7 +182,7 @@ class _PantallaHospitalizacionesState
               backgroundColor:
                   esHospitalizado ? Colors.orange[100] : Colors.green[100],
               child: Icon(
-                esHospitalizado ? Icons.local_hospital : Icons.check_circle,
+                esHospitalizado ? Icons.local_hospital_outlined : Icons.check_circle,
                 color: esHospitalizado ? Colors.orange : Colors.green,
               ),
             ),

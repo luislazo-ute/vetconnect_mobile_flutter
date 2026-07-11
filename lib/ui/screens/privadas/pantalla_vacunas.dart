@@ -172,7 +172,7 @@ class _PantallaVacunasState extends ConsumerState<PantallaVacunas> {
         return Card(
           child: ListTile(
             onTap: () => _abrirDetalle(v),
-            leading: const CircleAvatar(child: Icon(Icons.vaccines)),
+            leading: const CircleAvatar(child: Icon(Icons.vaccines_outlined)),
             title: Text(v.nombreVacuna),
             subtitle: Text('${v.mascotaNombre} · ${v.fechaAplicacion}'),
             trailing: esAdmin

@@ -53,7 +53,7 @@ class PantallaVeterinarioDetalle extends StatelessWidget {
             etiqueta: 'Horario',
             valor: vet.horarioAtencion,
           ),
-          _Tile(icono: Icons.phone, etiqueta: 'Teléfono', valor: vet.telefono),
+          _Tile(icono: Icons.phone_outlined, etiqueta: 'Teléfono', valor: vet.telefono),
           _Tile(
             icono: Icons.email_outlined,
             etiqueta: 'Correo',

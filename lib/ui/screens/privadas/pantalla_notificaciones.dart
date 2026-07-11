@@ -134,7 +134,7 @@ class _PantallaNotificacionesState
             leading: CircleAvatar(
               backgroundColor: n.leida ? Colors.grey[200] : Colors.blue[100],
               child: Icon(
-                n.leida ? Icons.notifications_none : Icons.notifications_active,
+                n.leida ? Icons.notifications_outlined : Icons.notifications_outlined,
                 color: n.leida ? Colors.grey : Colors.blue,
               ),
             ),

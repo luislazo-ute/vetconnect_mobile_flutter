@@ -159,7 +159,7 @@ class _PantallaCitasState extends ConsumerState<PantallaCitas> {
         final c = estado.citas[i];
         return Card(
           child: ListTile(
-            leading: const CircleAvatar(child: Icon(Icons.event)),
+            leading: const CircleAvatar(child: Icon(Icons.event_outlined)),
             title: Text(c.mascotaNombre),
             subtitle: Text('${c.fechaCorta} · ${c.horaCorta}\n${c.motivo}'),
             isThreeLine: true,

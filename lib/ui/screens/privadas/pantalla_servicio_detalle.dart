@@ -21,7 +21,7 @@ class PantallaServicioDetalle extends ConsumerWidget {
         actions: [
           if (esAdmin)
             IconButton(
-              icon: const Icon(Icons.edit),
+              icon: const Icon(Icons.edit_outlined),
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(

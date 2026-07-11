@@ -136,7 +136,7 @@ class _PantallaHabitacionesState extends ConsumerState<PantallaHabitaciones> {
                                   ? Colors.green[100]
                                   : Colors.grey[200],
                               child: Icon(
-                                Icons.meeting_room,
+                                Icons.meeting_room_outlined,
                                 color: h.disponible ? Colors.green : Colors.grey,
                               ),
                             ),

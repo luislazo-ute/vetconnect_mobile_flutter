@@ -173,7 +173,7 @@ class _PantallaRecetasState extends ConsumerState<PantallaRecetas> {
         return Card(
           child: ListTile(
             onTap: () => _abrirDetalle(r),
-            leading: const CircleAvatar(child: Icon(Icons.medication)),
+            leading: const CircleAvatar(child: Icon(Icons.medication_outlined)),
             title: Text(r.mascotaNombre),
             subtitle: Text('${r.veterinarioNombre} · ${r.fecha}'),
             trailing: esAdmin

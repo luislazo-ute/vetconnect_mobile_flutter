@@ -172,7 +172,7 @@ class _PantallaProductosState extends ConsumerState<PantallaProductos> {
         return Card(
           child: ListTile(
             onTap: () => _abrirDetalle(p),
-            leading: const CircleAvatar(child: Icon(Icons.inventory_2)),
+            leading: const CircleAvatar(child: Icon(Icons.inventory_2_outlined)),
             title: Text(p.nombre),
             subtitle: Text('${p.categoriaNombre} · Stock: ${p.stock}'),
             trailing: esAdmin
