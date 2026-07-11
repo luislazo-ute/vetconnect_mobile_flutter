@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../data/repositories/receta_repository_impl.dart';
+import '../../domain/entities/receta.dart';
 import '../../domain/repositories/i_receta_repository.dart';
 import '../../domain/usecases/actualizar_receta_uc.dart';
 import '../../domain/usecases/crear_receta_uc.dart';
@@ -28,3 +29,7 @@ final eliminarRecetaUcProvider = Provider(
 final obtenerRecetaPorIdUcProvider = Provider(
   (ref) => ObtenerRecetaPorIdUc(ref.watch(recetaRepositoryProvider)),
 );
+
+final recetaDetalleProvider = FutureProvider.family<Receta, int>((ref, id) {
+  return ref.watch(obtenerRecetaPorIdUcProvider)(id);
+});

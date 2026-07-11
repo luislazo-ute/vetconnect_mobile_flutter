@@ -3,24 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
 import '../../../domain/entities/mascota.dart';
+import '../../../domain/entities/producto.dart';
 import '../../notifiers/mascotas_notifier.dart';
+import '../../notifiers/productos_notifier.dart';
 import '../../notifiers/recetas_notifier.dart';
 import '../../providers/receta_providers.dart';
 
-class _DetalleLinea {
-  String medicamento = '';
+class _LineaMed {
+  int? productoId;
   String dosis = '';
   String frecuencia = '';
   String duracion = '';
   String observaciones = '';
-
-  Map<String, dynamic> toJson() => {
-        'medicamento': medicamento,
-        'dosis': dosis,
-        'frecuencia': frecuencia,
-        if (duracion.isNotEmpty) 'duracion': duracion,
-        if (observaciones.isNotEmpty) 'observaciones': observaciones,
-      };
 }
 
 class PantallaRecetaFormulario extends ConsumerStatefulWidget {
@@ -32,25 +26,26 @@ class PantallaRecetaFormulario extends ConsumerStatefulWidget {
 
 class _FormState extends ConsumerState<PantallaRecetaFormulario> {
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _observacionesCtrl;
+  late final TextEditingController _instruccionesCtrl;
   late final TextEditingController _fechaCtrl;
   int? _mascotaId;
   bool _guardando = false;
-  final List<_DetalleLinea> _detalles = [];
+  final List<_LineaMed> _detalles = [];
 
   @override
   void initState() {
     super.initState();
-    _observacionesCtrl = TextEditingController();
+    _instruccionesCtrl = TextEditingController();
+    final hoy = DateTime.now();
     _fechaCtrl = TextEditingController(
-      text:
-          '${DateTime.now().year}-${DateTime.now().month.toString().padLeft(2, '0')}-${DateTime.now().day.toString().padLeft(2, '0')}',
+      text: '${hoy.year}-${hoy.month.toString().padLeft(2, '0')}-'
+          '${hoy.day.toString().padLeft(2, '0')}',
     );
   }
 
   @override
   void dispose() {
-    _observacionesCtrl.dispose();
+    _instruccionesCtrl.dispose();
     _fechaCtrl.dispose();
     super.dispose();
   }
@@ -64,17 +59,13 @@ class _FormState extends ConsumerState<PantallaRecetaFormulario> {
     );
     if (picked != null) {
       _fechaCtrl.text =
-          '${picked.year}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
+          '${picked.year}-${picked.month.toString().padLeft(2, '0')}-'
+          '${picked.day.toString().padLeft(2, '0')}';
     }
   }
 
-  void _agregarDetalle() {
-    setState(() => _detalles.add(_DetalleLinea()));
-  }
-
-  void _removerDetalle(int index) {
-    setState(() => _detalles.removeAt(index));
-  }
+  void _agregarDetalle() => setState(() => _detalles.add(_LineaMed()));
+  void _removerDetalle(int i) => setState(() => _detalles.removeAt(i));
 
   Future<void> _guardar() async {
     if (!_formKey.currentState!.validate()) return;
@@ -91,21 +82,29 @@ class _FormState extends ConsumerState<PantallaRecetaFormulario> {
 
     final datos = <String, dynamic>{
       'mascota': _mascotaId,
-      'fecha': _fechaCtrl.text.trim(),
-      if (_observacionesCtrl.text.trim().isNotEmpty)
-        'observaciones': _observacionesCtrl.text.trim(),
-      'detalle_receta_set': _detalles.map((d) => d.toJson()).toList(),
+      'fecha_emision': '${_fechaCtrl.text.trim()}T09:00:00',
+      if (_instruccionesCtrl.text.trim().isNotEmpty)
+        'instrucciones': _instruccionesCtrl.text.trim(),
     };
+    final detalles = _detalles
+        .map((d) => <String, dynamic>{
+              'producto': d.productoId,
+              'dosis': d.dosis.trim(),
+              'frecuencia': d.frecuencia.trim(),
+              if (d.duracion.trim().isNotEmpty)
+                'duracion_dias': int.tryParse(d.duracion.trim()),
+              if (d.observaciones.trim().isNotEmpty)
+                'observaciones': d.observaciones.trim(),
+            })
+        .toList();
 
     final messenger = ScaffoldMessenger.of(context);
     try {
-      await ref.read(crearRecetaUcProvider)(datos);
+      await ref.read(crearRecetaUcProvider)(datos: datos, detalles: detalles);
       ref.read(recetasNotifierProvider.notifier).cargar();
       if (mounted) {
         Navigator.of(context).pop();
-        messenger.showSnackBar(
-          const SnackBar(content: Text('Receta creada')),
-        );
+        messenger.showSnackBar(const SnackBar(content: Text('Receta creada')));
       }
     } on ExcepcionApi catch (e) {
       if (mounted) setState(() => _guardando = false);
@@ -117,8 +116,16 @@ class _FormState extends ConsumerState<PantallaRecetaFormulario> {
 
   @override
   Widget build(BuildContext context) {
-    final mascotasState = ref.watch(mascotasNotifierProvider);
-    final mascotas = mascotasState.mascotas.where((m) => m.isActive).toList();
+    final mascotas = ref
+        .watch(mascotasNotifierProvider)
+        .mascotas
+        .where((m) => m.isActive)
+        .toList();
+    final productos = ref
+        .watch(productosNotifierProvider)
+        .productos
+        .where((p) => p.isActive)
+        .toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text('Nueva receta')),
@@ -129,6 +136,7 @@ class _FormState extends ConsumerState<PantallaRecetaFormulario> {
           children: [
             DropdownButtonFormField<int>(
               initialValue: _mascotaId,
+              isExpanded: true,
               decoration: const InputDecoration(
                 labelText: 'Mascota',
                 border: OutlineInputBorder(),
@@ -147,7 +155,7 @@ class _FormState extends ConsumerState<PantallaRecetaFormulario> {
               controller: _fechaCtrl,
               readOnly: true,
               decoration: const InputDecoration(
-                labelText: 'Fecha',
+                labelText: 'Fecha de emisión',
                 border: OutlineInputBorder(),
                 suffixIcon: Icon(Icons.calendar_today),
               ),
@@ -157,10 +165,10 @@ class _FormState extends ConsumerState<PantallaRecetaFormulario> {
             ),
             const SizedBox(height: 16),
             TextFormField(
-              controller: _observacionesCtrl,
+              controller: _instruccionesCtrl,
               maxLines: 2,
               decoration: const InputDecoration(
-                labelText: 'Observaciones (opcional)',
+                labelText: 'Instrucciones (opcional)',
                 border: OutlineInputBorder(),
               ),
             ),
@@ -168,12 +176,11 @@ class _FormState extends ConsumerState<PantallaRecetaFormulario> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Medicamentos',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
+                Text('Medicamentos',
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold)),
                 TextButton.icon(
                   onPressed: _agregarDetalle,
                   icon: const Icon(Icons.add),
@@ -182,7 +189,7 @@ class _FormState extends ConsumerState<PantallaRecetaFormulario> {
               ],
             ),
             ..._detalles.asMap().entries.map(
-                  (entry) => _cardDetalle(entry.key, entry.value),
+                  (e) => _cardDetalle(e.key, e.value, productos),
                 ),
             const SizedBox(height: 24),
             FilledButton(
@@ -203,37 +210,39 @@ class _FormState extends ConsumerState<PantallaRecetaFormulario> {
     );
   }
 
-  Widget _cardDetalle(int index, _DetalleLinea detalle) {
+  Widget _cardDetalle(int index, _LineaMed detalle, List<Producto> productos) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Medicamento #${index + 1}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                Expanded(
+                  child: DropdownButtonFormField<int>(
+                    initialValue: detalle.productoId,
+                    isExpanded: true,
+                    decoration: const InputDecoration(
+                      labelText: 'Medicamento',
+                      border: OutlineInputBorder(),
+                      isDense: true,
+                    ),
+                    items: productos
+                        .map((Producto p) => DropdownMenuItem(
+                              value: p.id,
+                              child: Text(p.nombre, overflow: TextOverflow.ellipsis),
+                            ))
+                        .toList(),
+                    onChanged: (v) => setState(() => detalle.productoId = v),
+                    validator: (v) => v == null ? 'Selecciona' : null,
+                  ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete_outline, color: Colors.red),
                   onPressed: () => _removerDetalle(index),
                 ),
               ],
-            ),
-            TextFormField(
-              initialValue: detalle.medicamento,
-              decoration: const InputDecoration(
-                labelText: 'Medicamento',
-                border: OutlineInputBorder(),
-                isDense: true,
-              ),
-              onChanged: (v) => detalle.medicamento = v,
-              validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'Obligatorio' : null,
             ),
             const SizedBox(height: 8),
             Row(
@@ -273,8 +282,9 @@ class _FormState extends ConsumerState<PantallaRecetaFormulario> {
                 Expanded(
                   child: TextFormField(
                     initialValue: detalle.duracion,
+                    keyboardType: TextInputType.number,
                     decoration: const InputDecoration(
-                      labelText: 'Duración (opcional)',
+                      labelText: 'Días (opcional)',
                       border: OutlineInputBorder(),
                       isDense: true,
                     ),

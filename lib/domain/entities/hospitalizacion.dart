@@ -3,14 +3,13 @@ class Hospitalizacion {
   final int mascota;
   final String mascotaNombre;
   final int habitacion;
-  final String habitacionNombre;
+  final String habitacionCodigo;
+  final String veterinarioNombre;
   final String fechaIngreso;
   final String? fechaAlta;
   final String motivo;
   final String? diagnostico;
-  final String estado;
-  final String estadoDisplay;
-  final String? observaciones;
+  final String? tratamiento;
   final bool isActive;
 
   const Hospitalizacion({
@@ -18,14 +17,19 @@ class Hospitalizacion {
     required this.mascota,
     required this.mascotaNombre,
     required this.habitacion,
-    required this.habitacionNombre,
+    required this.habitacionCodigo,
+    this.veterinarioNombre = '',
     required this.fechaIngreso,
     this.fechaAlta,
     required this.motivo,
     this.diagnostico,
-    required this.estado,
-    required this.estadoDisplay,
-    this.observaciones,
+    this.tratamiento,
     this.isActive = true,
   });
+
+  bool get activo => fechaAlta == null || fechaAlta!.isEmpty;
+
+  String get estado => activo ? 'hospitalizado' : 'alta';
+
+  String get estadoDisplay => activo ? 'Hospitalizado' : 'Dado de alta';
 }

@@ -5,5 +5,10 @@ class CrearRecetaUc {
   final IRecetaRepository _repo;
   CrearRecetaUc(this._repo);
 
-  Future<Receta> call(Map<String, dynamic> datos) => _repo.crearReceta(datos);
+  Future<Receta> call({
+    required Map<String, dynamic> datos,
+    required List<Map<String, dynamic>> detalles,
+  }) {
+    return _repo.crearReceta(datos: datos, detalles: detalles);
+  }
 }

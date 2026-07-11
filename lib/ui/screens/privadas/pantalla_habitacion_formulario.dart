@@ -16,12 +16,12 @@ class PantallaHabitacionFormulario extends ConsumerStatefulWidget {
 
 class _FormState extends ConsumerState<PantallaHabitacionFormulario> {
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _nombreCtrl;
-  late final TextEditingController _numeroCtrl;
+  late final TextEditingController _codigoCtrl;
   late final TextEditingController _capacidadCtrl;
   late final TextEditingController _precioCtrl;
+  late final TextEditingController _observacionesCtrl;
   String? _tipo;
-  bool _disponible = true;
+  String _estado = 'disponible';
   bool _isActive = true;
   bool _guardando = false;
 
@@ -31,21 +31,21 @@ class _FormState extends ConsumerState<PantallaHabitacionFormulario> {
   void initState() {
     super.initState();
     final h = widget.habitacion;
-    _nombreCtrl = TextEditingController(text: h?.nombre ?? '');
-    _numeroCtrl = TextEditingController(text: h?.numero.toString() ?? '');
+    _codigoCtrl = TextEditingController(text: h?.codigo ?? '');
     _capacidadCtrl = TextEditingController(text: h?.capacidad.toString() ?? '1');
     _precioCtrl = TextEditingController(text: h?.precioDia ?? '');
-    _tipo = h?.tipo;
-    _disponible = h?.disponible ?? true;
+    _observacionesCtrl = TextEditingController(text: h?.observaciones ?? '');
+    _tipo = (h != null && h.tipo.isNotEmpty) ? h.tipo : null;
+    _estado = h?.estado ?? 'disponible';
     _isActive = h?.isActive ?? true;
   }
 
   @override
   void dispose() {
-    _nombreCtrl.dispose();
-    _numeroCtrl.dispose();
+    _codigoCtrl.dispose();
     _capacidadCtrl.dispose();
     _precioCtrl.dispose();
+    _observacionesCtrl.dispose();
     super.dispose();
   }
 
@@ -54,12 +54,12 @@ class _FormState extends ConsumerState<PantallaHabitacionFormulario> {
     setState(() => _guardando = true);
 
     final datos = <String, dynamic>{
-      'nombre': _nombreCtrl.text.trim(),
-      'numero': int.parse(_numeroCtrl.text.trim()),
-      'tipo': _tipo,
+      'codigo': _codigoCtrl.text.trim(),
+      'tipo': _tipo ?? '',
       'capacidad': int.parse(_capacidadCtrl.text.trim()),
       'precio_dia': _precioCtrl.text.trim(),
-      'disponible': _disponible,
+      'estado': _estado,
+      'observaciones': _observacionesCtrl.text.trim(),
       'is_active': _isActive,
     };
 
@@ -103,64 +103,14 @@ class _FormState extends ConsumerState<PantallaHabitacionFormulario> {
           padding: const EdgeInsets.all(20),
           children: [
             TextFormField(
-              controller: _nombreCtrl,
+              controller: _codigoCtrl,
               decoration: const InputDecoration(
-                labelText: 'Nombre',
+                labelText: 'Código',
+                hintText: 'Ej: H-101',
                 border: OutlineInputBorder(),
               ),
               validator: (v) =>
-                  (v == null || v.trim().isEmpty) ? 'El nombre es obligatorio' : null,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _numeroCtrl,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Número',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (v) {
-                      if (v == null || v.trim().isEmpty) return 'Obligatorio';
-                      if (int.tryParse(v.trim()) == null) return 'Inválido';
-                      return null;
-                    },
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: TextFormField(
-                    controller: _capacidadCtrl,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Capacidad',
-                      border: OutlineInputBorder(),
-                    ),
-                    validator: (v) {
-                      if (v == null || v.trim().isEmpty) return 'Obligatorio';
-                      if (int.tryParse(v.trim()) == null) return 'Inválido';
-                      return null;
-                    },
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            TextFormField(
-              controller: _precioCtrl,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Precio por día',
-                prefixText: '\$',
-                border: OutlineInputBorder(),
-              ),
-              validator: (v) {
-                if (v == null || v.trim().isEmpty) return 'El precio es obligatorio';
-                if (double.tryParse(v.trim()) == null) return 'Precio inválido';
-                return null;
-              },
+                  (v == null || v.trim().isEmpty) ? 'El código es obligatorio' : null,
             ),
             const SizedBox(height: 16),
             DropdownButtonFormField<String>(
@@ -178,11 +128,66 @@ class _FormState extends ConsumerState<PantallaHabitacionFormulario> {
               validator: (v) => v == null ? 'Selecciona un tipo' : null,
             ),
             const SizedBox(height: 16),
-            SwitchListTile(
-              title: const Text('Disponible'),
-              value: _disponible,
-              onChanged: (v) => setState(() => _disponible = v),
+            Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    controller: _capacidadCtrl,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Capacidad',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (v) {
+                      if (v == null || v.trim().isEmpty) return 'Obligatorio';
+                      if (int.tryParse(v.trim()) == null) return 'Inválido';
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: TextFormField(
+                    controller: _precioCtrl,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      labelText: 'Precio/día',
+                      prefixText: '\$',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (v) {
+                      if (v == null || v.trim().isEmpty) return 'Obligatorio';
+                      if (double.tryParse(v.trim()) == null) return 'Inválido';
+                      return null;
+                    },
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 16),
+            DropdownButtonFormField<String>(
+              initialValue: _estado,
+              decoration: const InputDecoration(
+                labelText: 'Estado',
+                border: OutlineInputBorder(),
+              ),
+              items: const [
+                DropdownMenuItem(value: 'disponible', child: Text('Disponible')),
+                DropdownMenuItem(value: 'ocupada', child: Text('Ocupada')),
+                DropdownMenuItem(value: 'mantenimiento', child: Text('Mantenimiento')),
+              ],
+              onChanged: (v) => setState(() => _estado = v ?? 'disponible'),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _observacionesCtrl,
+              maxLines: 2,
+              decoration: const InputDecoration(
+                labelText: 'Observaciones (opcional)',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
             SwitchListTile(
               title: const Text('Activa'),
               value: _isActive,

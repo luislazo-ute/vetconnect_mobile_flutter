@@ -5,14 +5,13 @@ class HospitalizacionDto {
   final int mascota;
   final String mascotaNombre;
   final int habitacion;
-  final String habitacionNombre;
+  final String habitacionCodigo;
+  final String veterinarioNombre;
   final String fechaIngreso;
   final String? fechaAlta;
   final String motivo;
   final String? diagnostico;
-  final String estado;
-  final String estadoDisplay;
-  final String? observaciones;
+  final String? tratamiento;
   final bool isActive;
 
   const HospitalizacionDto({
@@ -20,14 +19,13 @@ class HospitalizacionDto {
     required this.mascota,
     required this.mascotaNombre,
     required this.habitacion,
-    required this.habitacionNombre,
+    required this.habitacionCodigo,
+    required this.veterinarioNombre,
     required this.fechaIngreso,
     this.fechaAlta,
     required this.motivo,
     this.diagnostico,
-    required this.estado,
-    required this.estadoDisplay,
-    this.observaciones,
+    this.tratamiento,
     required this.isActive,
   });
 
@@ -37,14 +35,13 @@ class HospitalizacionDto {
       mascota: json['mascota'] as int,
       mascotaNombre: json['mascota_nombre'] as String? ?? '',
       habitacion: json['habitacion'] as int,
-      habitacionNombre: json['habitacion_nombre'] as String? ?? '',
-      fechaIngreso: json['fecha_ingreso'] as String,
+      habitacionCodigo: json['habitacion_codigo'] as String? ?? '',
+      veterinarioNombre: json['veterinario_nombre'] as String? ?? '',
+      fechaIngreso: json['fecha_ingreso'] as String? ?? '',
       fechaAlta: json['fecha_alta'] as String?,
-      motivo: json['motivo'] as String,
+      motivo: json['motivo'] as String? ?? '',
       diagnostico: json['diagnostico'] as String?,
-      estado: json['estado'] as String,
-      estadoDisplay: json['estado_display'] as String? ?? '',
-      observaciones: json['observaciones'] as String?,
+      tratamiento: json['tratamiento'] as String?,
       isActive: json['is_active'] as bool? ?? true,
     );
   }
@@ -55,14 +52,13 @@ class HospitalizacionDto {
       mascota: mascota,
       mascotaNombre: mascotaNombre,
       habitacion: habitacion,
-      habitacionNombre: habitacionNombre,
+      habitacionCodigo: habitacionCodigo,
+      veterinarioNombre: veterinarioNombre,
       fechaIngreso: fechaIngreso,
       fechaAlta: fechaAlta,
       motivo: motivo,
       diagnostico: diagnostico,
-      estado: estado,
-      estadoDisplay: estadoDisplay,
-      observaciones: observaciones,
+      tratamiento: tratamiento,
       isActive: isActive,
     );
   }

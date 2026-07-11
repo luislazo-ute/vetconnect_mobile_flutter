@@ -80,10 +80,8 @@ class _FormState extends ConsumerState<PantallaVacunaFormulario> {
       if (_fechaProxCtrl.text.trim().isNotEmpty)
         'fecha_proxima_dosis': _fechaProxCtrl.text.trim(),
       if (_loteCtrl.text.trim().isNotEmpty) 'lote': _loteCtrl.text.trim(),
-      if (_dosisCtrl.text.trim().isNotEmpty) 'dosis': _dosisCtrl.text.trim(),
       if (_observacionesCtrl.text.trim().isNotEmpty)
         'observaciones': _observacionesCtrl.text.trim(),
-      'is_active': _isActive,
     };
 
     final messenger = ScaffoldMessenger.of(context);

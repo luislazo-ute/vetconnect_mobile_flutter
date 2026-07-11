@@ -1,67 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../domain/entities/receta.dart';
+import '../../providers/receta_providers.dart';
 
 class PantallaRecetaDetalle extends ConsumerWidget {
-  final Receta receta;
-  const PantallaRecetaDetalle({super.key, required this.receta});
+  final int recetaId;
+  const PantallaRecetaDetalle({super.key, required this.recetaId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final async = ref.watch(recetaDetalleProvider(recetaId));
     final textos = Theme.of(context).textTheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Detalle de receta'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          Text('Receta para ${receta.mascotaNombre}',
-              style: textos.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
-          _Campo('Veterinario', receta.veterinarioNombre),
-          const SizedBox(height: 8),
-          _Campo('Fecha', receta.fecha),
-          const SizedBox(height: 8),
-          _Campo(
-            'Observaciones',
-            receta.observaciones?.isNotEmpty == true
-                ? receta.observaciones!
-                : 'Sin observaciones',
+      appBar: AppBar(title: const Text('Detalle de receta')),
+      body: async.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('No se pudo cargar la receta.'),
+              const SizedBox(height: 12),
+              FilledButton(
+                onPressed: () => ref.invalidate(recetaDetalleProvider(recetaId)),
+                child: const Text('Reintentar'),
+              ),
+            ],
           ),
-          if (receta.detalles.isNotEmpty) ...[
-            const SizedBox(height: 24),
-            Text(
-              'Medicamentos',
-              style: textos.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-            ),
+        ),
+        data: (receta) => ListView(
+          padding: const EdgeInsets.all(20),
+          children: [
+            Text('Receta para ${receta.mascotaNombre}',
+                style: textos.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            ...receta.detalles.map(
-              (d) => Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        d.medicamento,
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 4),
-                      Text('Dosis: ${d.dosis} · Frecuencia: ${d.frecuencia}'),
-                      if (d.duracion != null && d.duracion!.isNotEmpty)
-                        Text('Duración: ${d.duracion}'),
-                      if (d.observaciones != null && d.observaciones!.isNotEmpty)
-                        Text('Obs: ${d.observaciones}'),
-                    ],
+            _Campo('Veterinario', receta.veterinarioNombre),
+            const SizedBox(height: 8),
+            _Campo('Fecha', receta.fecha),
+            const SizedBox(height: 8),
+            _Campo(
+              'Instrucciones',
+              receta.observaciones?.isNotEmpty == true
+                  ? receta.observaciones!
+                  : 'Sin instrucciones',
+            ),
+            const SizedBox(height: 24),
+            Text('Medicamentos',
+                style: textos.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            if (receta.detalles.isEmpty)
+              const Text('Sin medicamentos registrados.')
+            else
+              ...receta.detalles.map(
+                (d) => Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(d.medicamento,
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 4),
+                        Text('Dosis: ${d.dosis} · Frecuencia: ${d.frecuencia}'),
+                        if (d.duracion != null && d.duracion!.isNotEmpty)
+                          Text('Duración: ${d.duracion}'),
+                        if (d.observaciones != null && d.observaciones!.isNotEmpty)
+                          Text('Obs: ${d.observaciones}'),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
-        ],
+        ),
       ),
     );
   }

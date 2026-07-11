@@ -36,7 +36,7 @@ class _FormState extends ConsumerState<PantallaHospitalizacionFormulario> {
     final h = widget.hospitalizacion;
     _motivoCtrl = TextEditingController(text: h?.motivo ?? '');
     _diagnosticoCtrl = TextEditingController(text: h?.diagnostico ?? '');
-    _observacionesCtrl = TextEditingController(text: h?.observaciones ?? '');
+    _observacionesCtrl = TextEditingController(text: h?.tratamiento ?? '');
     _mascotaId = h?.mascota;
     _habitacionId = h?.habitacion;
   }
@@ -57,10 +57,11 @@ class _FormState extends ConsumerState<PantallaHospitalizacionFormulario> {
       'mascota': _mascotaId,
       'habitacion': _habitacionId,
       'motivo': _motivoCtrl.text.trim(),
+      if (!_esEdicion) 'fecha_ingreso': DateTime.now().toIso8601String(),
       if (_diagnosticoCtrl.text.trim().isNotEmpty)
         'diagnostico': _diagnosticoCtrl.text.trim(),
       if (_observacionesCtrl.text.trim().isNotEmpty)
-        'observaciones': _observacionesCtrl.text.trim(),
+        'tratamiento': _observacionesCtrl.text.trim(),
     };
 
     final messenger = ScaffoldMessenger.of(context);
@@ -176,7 +177,7 @@ class _FormState extends ConsumerState<PantallaHospitalizacionFormulario> {
               items: habitaciones
                   .map((Habitacion h) => DropdownMenuItem(
                         value: h.id,
-                        child: Text('${h.nombre} - ${h.tipoDisplay}'),
+                        child: Text('${h.codigo} - ${h.tipoDisplay}'),
                       ))
                   .toList(),
               onChanged: (v) => setState(() => _habitacionId = v),
@@ -188,7 +189,7 @@ class _FormState extends ConsumerState<PantallaHospitalizacionFormulario> {
               controller: _observacionesCtrl,
               maxLines: 2,
               decoration: const InputDecoration(
-                labelText: 'Observaciones (opcional)',
+                labelText: 'Tratamiento (opcional)',
                 border: OutlineInputBorder(),
               ),
             ),

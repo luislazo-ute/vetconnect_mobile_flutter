@@ -46,7 +46,7 @@ class _PantallaRecetasState extends ConsumerState<PantallaRecetas> {
 
   void _abrirDetalle(Receta r) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => PantallaRecetaDetalle(receta: r)),
+      MaterialPageRoute(builder: (_) => PantallaRecetaDetalle(recetaId: r.id)),
     );
   }
 
@@ -185,10 +185,7 @@ class _PantallaRecetasState extends ConsumerState<PantallaRecetas> {
                       PopupMenuItem(value: 'eliminar', child: Text('Eliminar')),
                     ],
                   )
-                : Chip(
-                    label: Text('${r.detalles.length} medicamento(s)'),
-                    backgroundColor: Colors.blue[100],
-                  ),
+                : const Icon(Icons.chevron_right),
           ),
         );
       },

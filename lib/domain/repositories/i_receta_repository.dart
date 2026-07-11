@@ -7,7 +7,10 @@ abstract interface class IRecetaRepository {
     String busqueda = '',
   });
   Future<Receta> obtenerReceta(int id);
-  Future<Receta> crearReceta(Map<String, dynamic> datos);
+  Future<Receta> crearReceta({
+    required Map<String, dynamic> datos,
+    required List<Map<String, dynamic>> detalles,
+  });
   Future<Receta> actualizarReceta(int id, Map<String, dynamic> datos);
   Future<void> eliminarReceta(int id);
 }

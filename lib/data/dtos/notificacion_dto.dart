@@ -18,10 +18,10 @@ class NotificacionDto {
   factory NotificacionDto.fromJson(Map<String, dynamic> json) {
     return NotificacionDto(
       id: json['id'] as int,
-      titulo: json['titulo'] as String,
-      mensaje: json['mensaje'] as String,
+      titulo: json['titulo'] as String? ?? '',
+      mensaje: json['mensaje'] as String? ?? '',
       leida: json['leida'] as bool? ?? false,
-      fechaCreacion: json['fecha_creacion'] as String,
+      fechaCreacion: json['created_at'] as String? ?? '',
     );
   }
 

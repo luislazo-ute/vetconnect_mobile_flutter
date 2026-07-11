@@ -20,13 +20,14 @@ class DetalleRecetaDto {
   });
 
   factory DetalleRecetaDto.fromJson(Map<String, dynamic> json) {
+    final dur = json['duracion_dias'];
     return DetalleRecetaDto(
       id: json['id'] as int,
-      receta: json['receta'] as int,
-      medicamento: json['medicamento'] as String,
-      dosis: json['dosis'] as String,
-      frecuencia: json['frecuencia'] as String,
-      duracion: json['duracion'] as String?,
+      receta: json['receta'] as int? ?? 0,
+      medicamento: json['producto_nombre'] as String? ?? '',
+      dosis: json['dosis'] as String? ?? '',
+      frecuencia: json['frecuencia'] as String? ?? '',
+      duracion: dur == null ? null : '$dur días',
       observaciones: json['observaciones'] as String?,
     );
   }

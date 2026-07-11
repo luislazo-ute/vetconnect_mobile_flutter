@@ -48,7 +48,7 @@ class _PantallaHabitacionesState extends ConsumerState<PantallaHabitaciones> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text('Eliminar habitación'),
-        content: Text('¿Seguro que quieres eliminar "${h.nombre}"?'),
+        content: Text('¿Seguro que quieres eliminar la habitación "${h.codigo}"?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -138,9 +138,9 @@ class _PantallaHabitacionesState extends ConsumerState<PantallaHabitaciones> {
                                 color: h.disponible ? Colors.green : Colors.grey,
                               ),
                             ),
-                            title: Text('${h.nombre} (#${h.numero})'),
+                            title: Text('Habitación ${h.codigo}'),
                             subtitle: Text(
-                              '${h.tipoDisplay} · Cap: ${h.capacidad} · ${h.precioDia}',
+                              '${h.tipoDisplay} · Cap: ${h.capacidad} · \$${h.precioDia}',
                             ),
                             trailing: esAdmin
                                 ? PopupMenuButton<String>(

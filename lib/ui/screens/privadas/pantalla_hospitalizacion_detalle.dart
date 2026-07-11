@@ -19,7 +19,7 @@ class PantallaHospitalizacionDetalle extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final esAdmin = ref.watch(rolActualProvider) == Rol.admin;
     final textos = Theme.of(context).textTheme;
-    final esHospitalizado = hospitalizacion.estado == 'hospitalizado';
+    final esHospitalizado = hospitalizacion.activo;
     final colorEstado = esHospitalizado ? Colors.orange : Colors.green;
 
     return Scaffold(
@@ -59,13 +59,13 @@ class PantallaHospitalizacionDetalle extends ConsumerWidget {
             ],
           ),
           const SizedBox(height: 16),
-          _Campo('Habitación', hospitalizacion.habitacionNombre),
+          _Campo('Habitación', hospitalizacion.habitacionCodigo),
           const SizedBox(height: 16),
           _Campo(
-            'Observaciones',
-            hospitalizacion.observaciones?.isNotEmpty == true
-                ? hospitalizacion.observaciones!
-                : 'Sin observaciones',
+            'Tratamiento',
+            hospitalizacion.tratamiento?.isNotEmpty == true
+                ? hospitalizacion.tratamiento!
+                : 'Sin tratamiento registrado',
           ),
           if (esHospitalizado && esAdmin) ...[
             const SizedBox(height: 24),
@@ -110,7 +110,7 @@ class PantallaHospitalizacionDetalle extends ConsumerWidget {
     try {
       await ref.read(actualizarHospitalizacionUcProvider)(
         hospitalizacion.id,
-        {'estado': 'alta'},
+        {'fecha_alta': DateTime.now().toIso8601String()},
       );
       ref.read(hospitalizacionesNotifierProvider.notifier).cargar();
       if (context.mounted) {
