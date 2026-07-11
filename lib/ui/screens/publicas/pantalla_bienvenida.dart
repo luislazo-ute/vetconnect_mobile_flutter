@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:go_router/go_router.dart';
@@ -8,9 +7,6 @@ import '../../../core/tema.dart';
 
 class PantallaBienvenida extends StatelessWidget {
   const PantallaBienvenida({super.key});
-
-  static const _urlMascota =
-      'https://images.dog.ceo/breeds/samoyed/n02111889_4754.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -25,27 +21,10 @@ class PantallaBienvenida extends StatelessWidget {
               child: Column(
                 children: [
                   const Spacer(),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(28),
-                    child: CachedNetworkImage(
-                      imageUrl: _urlMascota,
-                      height: 320,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      placeholder: (c, u) => Container(
-                        height: 320,
-                        color: Colors.white.withValues(alpha: 0.1),
-                        child: const Center(
-                          child: CircularProgressIndicator(color: Colors.white),
-                        ),
-                      ),
-                      errorWidget: (c, u, e) => Container(
-                        height: 320,
-                        color: Colors.white.withValues(alpha: 0.1),
-                        child: const Icon(Icons.pets,
-                            size: 90, color: Colors.white),
-                      ),
-                    ),
+                  Image.asset(
+                    'assets/images/vetconnect_bulldog.png',
+                    height: 340,
+                    fit: BoxFit.contain,
                   ).animate().fadeIn(duration: 600.ms).scale(
                         begin: const Offset(0.92, 0.92),
                         end: const Offset(1, 1),

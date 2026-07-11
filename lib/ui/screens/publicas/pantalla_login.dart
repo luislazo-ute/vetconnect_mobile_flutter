@@ -52,7 +52,7 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(24, 72, 24, 44),
+            padding: const EdgeInsets.fromLTRB(24, 28, 24, 44),
             decoration: const BoxDecoration(
               color: TemaApp.verdeBosque,
               borderRadius: BorderRadius.only(
@@ -62,6 +62,18 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
             ),
             child: Column(
               children: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Navigator.canPop(context)
+                      ? IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: const Icon(Icons.arrow_back,
+                              color: Colors.white),
+                          onPressed: () => Navigator.of(context).pop(),
+                        )
+                      : const SizedBox(height: 24),
+                ),
+                const SizedBox(height: 4),
                 Container(
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(

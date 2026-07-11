@@ -17,36 +17,18 @@ class PantallaHome extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Bienvenido a',
-                      style: textos.bodyMedium?.copyWith(color: Colors.grey),
-                    ),
-                    Text(
-                      'VetConnect 🐾',
-                      style: textos.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                Text(
+                  'Bienvenido a',
+                  style: textos.bodyMedium?.copyWith(color: Colors.grey),
                 ),
-                Row(
-                  children: [
-                    _iconoCircular(
-                      Icons.person_outline,
-                      () => context.pushNamed('login'),
-                    ),
-                    const SizedBox(width: 8),
-                    _iconoCircular(
-                      Icons.mail_outline,
-                      () => context.pushNamed('contacto'),
-                    ),
-                  ],
+                Text(
+                  'VetConnect 🐾',
+                  style: textos.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -57,48 +39,44 @@ class PantallaHome extends StatelessWidget {
               child: Stack(
                 children: [
                   Positioned.fill(
-                    child: CustomPaint(painter: FondoHuellas(opacidad: 0.08)),
+                    child: CustomPaint(painter: FondoHuellas(opacidad: 0.10)),
                   ),
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: const BoxDecoration(color: TemaApp.verdeBosque),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Text(
-                          'Cuidamos a tu\nmascota',
-                          style: textos.headlineSmall?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            height: 1.2,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Cuidamos a tu mascota',
+                                style: textos.titleLarge?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1.2,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Servicios veterinarios de confianza para tu mejor amigo.',
+                                style: textos.bodyMedium?.copyWith(
+                                  color: Colors.white.withValues(alpha: 0.85),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Servicios veterinarios de confianza.',
-                          style: textos.bodyMedium?.copyWith(
-                            color: Colors.white.withValues(alpha: 0.8),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        FilledButton(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: TemaApp.verdeBosque,
-                          ),
-                          onPressed: () => context.pushNamed('servicios'),
-                          child: const Text(
-                            'Ver servicios',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ),
+                        const SizedBox(width: 8),
+                        const Icon(Icons.pets, color: Colors.white, size: 56),
                       ],
                     ),
                   ),
                 ],
               ),
             ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1, end: 0),
-            const SizedBox(height: 24),
+            const SizedBox(height: 28),
 
             Text(
               'Explora',
@@ -118,22 +96,45 @@ class PantallaHome extends StatelessWidget {
                   begin: 0.15,
                   end: 0,
                 ),
-          ],
-        ),
-      ),
-    );
-  }
+            const SizedBox(height: 28),
 
-  Widget _iconoCircular(IconData icono, VoidCallback onTap) {
-    return Material(
-      color: TemaApp.verdeBosque.withValues(alpha: 0.08),
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Icon(icono, color: TemaApp.verdeBosque),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: TemaApp.verdeMedio.withValues(alpha: 0.10),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                children: [
+                  const CircleAvatar(
+                    backgroundColor: TemaApp.verdeBosque,
+                    child: Icon(Icons.pets, color: Colors.white),
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          '¿Ya eres cliente?',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Inicia sesión para agendar citas y ver tus mascotas.',
+                          style: textos.bodySmall?.copyWith(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  FilledButton(
+                    onPressed: () => context.pushNamed('login'),
+                    child: const Text('Entrar'),
+                  ),
+                ],
+              ),
+            ).animate().fadeIn(delay: 300.ms, duration: 400.ms),
+          ],
         ),
       ),
     );
