@@ -14,6 +14,14 @@ import 'pantalla_galeria.dart';
 import 'pantalla_historiales.dart';
 import 'pantalla_mascotas.dart';
 import 'pantalla_veterinarios_admin.dart';
+import 'pantalla_categorias.dart';
+import 'pantalla_productos.dart';
+import 'pantalla_servicios_admin.dart';
+import 'pantalla_vacunas.dart';
+import 'pantalla_hospitalizaciones.dart';
+import 'pantalla_recetas.dart';
+import 'pantalla_habitaciones.dart';
+import 'pantalla_notificaciones.dart';
 
 class PantallaDashboard extends ConsumerStatefulWidget {
   const PantallaDashboard({super.key});
@@ -29,6 +37,7 @@ class _PantallaDashboardState extends ConsumerState<PantallaDashboard> {
     _TabInicio(),
     PantallaMascotas(),
     PantallaCitas(),
+    _TabFacturacion(),
     _TabPerfil(),
   ];
 
@@ -48,6 +57,7 @@ class _PantallaDashboardState extends ConsumerState<PantallaDashboard> {
                   ItemNav(icono: Icons.home_outlined, etiqueta: 'Inicio'),
                   ItemNav(icono: Icons.pets_outlined, etiqueta: 'Pacientes'),
                   ItemNav(icono: Icons.event_outlined, etiqueta: 'Citas'),
+                  ItemNav(icono: Icons.receipt_long_outlined, etiqueta: 'Facturación'),
                   ItemNav(icono: Icons.person_outline, etiqueta: 'Perfil'),
                 ],
               ),
@@ -123,6 +133,81 @@ class _TabInicio extends ConsumerWidget {
                       builder: (_) => const PantallaHistoriales(),
                     ),
                   ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            'Clínica',
+            style: textos.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          Card(
+            child: ListTile(
+              leading: const Icon(
+                Icons.vaccines_outlined,
+                color: TemaApp.verdeBosque,
+              ),
+              title: const Text('Vacunas'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaVacunas()),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              leading: const Icon(
+                Icons.local_hospital_outlined,
+                color: TemaApp.verdeBosque,
+              ),
+              title: const Text('Hospitalizaciones'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const PantallaHospitalizaciones(),
+                ),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              leading: const Icon(
+                Icons.medication_outlined,
+                color: TemaApp.verdeBosque,
+              ),
+              title: const Text('Recetas'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaRecetas()),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              leading: const Icon(
+                Icons.meeting_room_outlined,
+                color: TemaApp.verdeBosque,
+              ),
+              title: const Text('Habitaciones'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaHabitaciones()),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              leading: const Icon(
+                Icons.notifications_outlined,
+                color: TemaApp.verdeBosque,
+              ),
+              title: const Text('Notificaciones'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const PantallaNotificaciones(),
+                ),
+              ),
             ),
           ),
           const SizedBox(height: 20),
@@ -229,6 +314,87 @@ class _ChipRol extends StatelessWidget {
   }
 }
 
+// ── Tab Facturación (Kevin Diaz) ──────────────────────────────────────────────
+class _TabFacturacion extends ConsumerWidget {
+  const _TabFacturacion();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textos = Theme.of(context).textTheme;
+    final usuario = ref.watch(authNotifierProvider).usuario;
+
+    return SafeArea(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
+        children: [
+          Text(
+            'Facturación',
+            style: textos.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          Card(
+            child: ListTile(
+              leading:
+                  const Icon(Icons.inventory_2_outlined, color: TemaApp.verdeBosque),
+              title: const Text('Productos'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaProductos()),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              leading:
+                  const Icon(Icons.category_outlined, color: TemaApp.verdeBosque),
+              title: const Text('Categorías de producto'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaCategorias()),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.medical_services_outlined,
+                  color: TemaApp.verdeBosque),
+              title: const Text('Servicios'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaServiciosAdmin()),
+              ),
+            ),
+          ),
+          if (usuario?.rol == Rol.admin) ...[
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: TemaApp.verdeBosque.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.admin_panel_settings_outlined,
+                      color: TemaApp.verdeBosque, size: 20),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Eres admin: puedes crear, editar y eliminar en Facturación.',
+                      style: TextStyle(color: TemaApp.verdeBosque, fontSize: 12),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 class _TabPerfil extends ConsumerWidget {
   const _TabPerfil();
 
