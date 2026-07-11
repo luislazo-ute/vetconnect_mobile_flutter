@@ -76,7 +76,7 @@ class NotificacionesNotifier extends Notifier<NotificacionesState> {
         return n;
       }).toList();
       state = state.copyWith(notificaciones: notifs);
-    } on ExcepcionApi catch (e) {
+    } on ExcepcionApi {
       // Silently fail for mark as read
     }
   }
@@ -85,7 +85,7 @@ class NotificacionesNotifier extends Notifier<NotificacionesState> {
     try {
       await _marcarTodas();
       await cargar();
-    } on ExcepcionApi catch (e) {
+    } on ExcepcionApi {
       // Silently fail
     }
   }

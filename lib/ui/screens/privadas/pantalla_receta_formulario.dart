@@ -3,25 +3,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
 import '../../../domain/entities/mascota.dart';
-import '../../../domain/entities/receta.dart';
 import '../../notifiers/mascotas_notifier.dart';
 import '../../notifiers/recetas_notifier.dart';
 import '../../providers/receta_providers.dart';
 
 class _DetalleLinea {
-  String medicamento;
-  String dosis;
-  String frecuencia;
-  String duracion;
-  String observaciones;
-
-  _DetalleLinea({
-    this.medicamento = '',
-    this.dosis = '',
-    this.frecuencia = '',
-    this.duracion = '',
-    this.observaciones = '',
-  });
+  String medicamento = '';
+  String dosis = '';
+  String frecuencia = '';
+  String duracion = '';
+  String observaciones = '';
 
   Map<String, dynamic> toJson() => {
         'medicamento': medicamento,

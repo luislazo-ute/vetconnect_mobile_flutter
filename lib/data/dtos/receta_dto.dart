@@ -1,4 +1,3 @@
-import '../../domain/entities/detalle_receta.dart';
 import '../../domain/entities/receta.dart';
 import 'detalle_receta_dto.dart';
 

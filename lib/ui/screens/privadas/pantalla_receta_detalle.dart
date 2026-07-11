@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../domain/entities/receta.dart';
-import '../../../domain/entities/rol.dart';
-import '../../providers/rol_provider.dart';
 
 class PantallaRecetaDetalle extends ConsumerWidget {
   final Receta receta;

@@ -5,7 +5,6 @@ import '../../../core/errores.dart';
 import '../../../domain/entities/habitacion.dart';
 import '../../../domain/entities/rol.dart';
 import '../../notifiers/habitaciones_notifier.dart';
-import '../../notifiers/habitaciones_state.dart';
 import '../../providers/habitacion_providers.dart';
 import '../../providers/rol_provider.dart';
 import 'pantalla_habitacion_formulario.dart';
@@ -84,7 +83,6 @@ class _PantallaHabitacionesState extends ConsumerState<PantallaHabitaciones> {
   Widget build(BuildContext context) {
     final estado = ref.watch(habitacionesNotifierProvider);
     final esAdmin = ref.watch(rolActualProvider) == Rol.admin;
-    final textos = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
