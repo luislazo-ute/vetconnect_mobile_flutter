@@ -1,10 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
 import '../../../core/imagenes.dart';
-import '../../../core/tema.dart';
 import '../../../domain/entities/mascota.dart';
 import '../../../domain/entities/rol.dart';
 import '../../notifiers/mascotas_notifier.dart';
@@ -177,17 +175,12 @@ class _PantallaMascotasState extends ConsumerState<PantallaMascotas> {
               tag: 'mascota-${m.id}',
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: CachedNetworkImage(
-                  imageUrl: imagenPorEspecie(m.especie),
+                child: Image.asset(
+                  imagenPorEspecie(m.especie, m.id),
                   width: 48,
                   height: 48,
                   fit: BoxFit.cover,
-                  placeholder: (c, u) => Container(
-                    width: 48,
-                    height: 48,
-                    color: TemaApp.verdeMedio.withValues(alpha: 0.2),
-                  ),
-                  errorWidget: (c, u, e) => const CircleAvatar(
+                  errorBuilder: (c, e, s) => const CircleAvatar(
                     child: Icon(Icons.pets),
                   ),
                 ),

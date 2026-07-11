@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/imagenes.dart';
 import '../../../domain/entities/rol.dart';
 import '../../providers/galeria_providers.dart';
 import '../../providers/rol_provider.dart';
@@ -72,16 +73,9 @@ class PantallaGaleria extends ConsumerWidget {
                   tag: 'foto-${f.id}',
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16),
-                    child: Image.network(
-                      f.url,
+                    child: Image(
+                      image: proveedorImagen(f.url),
                       fit: BoxFit.cover,
-                      loadingBuilder:
-                          (context, child, progress) =>
-                              progress == null
-                                  ? child
-                                  : const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
                       errorBuilder:
                           (context, error, stack) => Container(
                             color: Colors.grey.shade200,

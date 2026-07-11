@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/imagenes.dart';
 import '../../../domain/entities/galeria_foto.dart';
 
 class PantallaGaleriaDetalle extends StatelessWidget {
@@ -14,8 +15,8 @@ class PantallaGaleriaDetalle extends StatelessWidget {
         children: [
           Hero(
             tag: 'foto-${foto.id}',
-            child: Image.network(
-              foto.url,
+            child: Image(
+              image: proveedorImagen(foto.url),
               width: double.infinity,
               height: 320,
               fit: BoxFit.cover,

@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/imagenes.dart';
@@ -30,16 +29,12 @@ class _State extends State<PantallaMascotaDetalle> {
             children: [
               Hero(
                 tag: 'mascota-${m.id}',
-                child: CachedNetworkImage(
-                  imageUrl: imagenPorEspecie(m.especie),
+                child: Image.asset(
+                  imagenPorEspecie(m.especie, m.id),
                   height: 320,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  placeholder: (c, u) => Container(
-                    height: 320,
-                    color: TemaApp.verdeMedio.withValues(alpha: 0.2),
-                  ),
-                  errorWidget: (c, u, e) => Container(
+                  errorBuilder: (c, e, s) => Container(
                     height: 320,
                     color: TemaApp.verdeMedio.withValues(alpha: 0.2),
                     child: const Icon(Icons.pets, size: 80, color: Colors.white),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/bottom_nav.dart';
 import '../../../core/colecciones_mongo.dart';
+import '../../../core/imagenes.dart';
 import '../../../core/tema.dart';
 import '../../../domain/entities/rol.dart';
 import '../../notifiers/auth_notifier.dart';
@@ -439,9 +440,6 @@ class _TabPerfil extends ConsumerWidget {
     final usuario = ref.watch(authNotifierProvider).usuario;
     final textos = Theme.of(context).textTheme;
 
-    final inicial =
-        (usuario?.username ?? '?').substring(0, 1).toUpperCase();
-
     return SafeArea(
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
@@ -457,14 +455,8 @@ class _TabPerfil extends ConsumerWidget {
                 CircleAvatar(
                   radius: 44,
                   backgroundColor: Colors.white.withValues(alpha: 0.2),
-                  child: Text(
-                    inicial,
-                    style: const TextStyle(
-                      fontSize: 34,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  backgroundImage:
+                      AssetImage(avatarPorRol(usuario?.rol.name ?? 'usuario')),
                 ),
                 const SizedBox(height: 12),
                 Text(

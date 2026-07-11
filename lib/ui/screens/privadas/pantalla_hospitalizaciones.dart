@@ -101,6 +101,10 @@ class _PantallaHospitalizacionesState
       body: SafeArea(
         child: Column(
           children: [
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: BackButton(),
+            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 12, 8),
               child: Row(

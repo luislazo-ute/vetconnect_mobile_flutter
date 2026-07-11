@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/imagenes.dart';
 import '../../notifiers/veterinarios_notifier.dart';
 import '../../notifiers/veterinarios_state.dart';
 
@@ -103,7 +104,7 @@ class _PantallaEquipoState extends ConsumerState<PantallaEquipo> {
             leading: Hero(
               tag: 'vet-${vet.id}',
               child: CircleAvatar(
-                child: Text(vet.nombre.isNotEmpty ? vet.nombre[0] : '?'),
+                backgroundImage: AssetImage(avatarVeterinario(vet.nombre)),
               ),
             ),
             title: Text(vet.nombre),

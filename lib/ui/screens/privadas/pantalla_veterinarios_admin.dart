@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
+import '../../../core/imagenes.dart';
 import '../../../domain/entities/veterinario.dart';
 import '../../notifiers/veterinarios_notifier.dart';
 import '../../providers/veterinario_providers.dart';
@@ -104,7 +105,7 @@ class _State extends ConsumerState<PantallaVeterinariosAdmin> {
                   return Card(
                     child: ListTile(
                       leading: CircleAvatar(
-                        child: Text(v.nombre.isNotEmpty ? v.nombre[0] : '?'),
+                        backgroundImage: AssetImage(avatarVeterinario(v.nombre)),
                       ),
                       title: Text(v.nombre),
                       subtitle: Text(v.especialidad),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
+import '../../../core/imagenes.dart';
 import '../../providers/cita_providers.dart';
 import '../../providers/galeria_providers.dart';
 
@@ -14,14 +15,13 @@ class PantallaGaleriaFormulario extends ConsumerStatefulWidget {
 
 class _GaleriaFormState extends ConsumerState<PantallaGaleriaFormulario> {
   final _formKey = GlobalKey<FormState>();
-  final _urlCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
   int? _mascotaId;
+  String? _fotoRuta;
   bool _guardando = false;
 
   @override
   void dispose() {
-    _urlCtrl.dispose();
     _descCtrl.dispose();
     super.dispose();
   }
@@ -31,7 +31,7 @@ class _GaleriaFormState extends ConsumerState<PantallaGaleriaFormulario> {
     setState(() => _guardando = true);
     final datos = {
       'mascota_id': _mascotaId,
-      'url': _urlCtrl.text.trim(),
+      'url': _fotoRuta,
       'descripcion': _descCtrl.text.trim(),
     };
     final messenger = ScaffoldMessenger.of(context);
@@ -86,18 +86,38 @@ class _GaleriaFormState extends ConsumerState<PantallaGaleriaFormulario> {
                           (v) => v == null ? 'Selecciona una mascota' : null,
                     ),
                     const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _urlCtrl,
+                    DropdownButtonFormField<String>(
+                      initialValue: _fotoRuta,
+                      isExpanded: true,
                       decoration: const InputDecoration(
-                        labelText: 'URL de la foto',
+                        labelText: 'Foto',
                         border: OutlineInputBorder(),
                       ),
+                      items:
+                          fotosDisponibles
+                              .map(
+                                (f) => DropdownMenuItem(
+                                  value: f.ruta,
+                                  child: Text(f.etiqueta),
+                                ),
+                              )
+                              .toList(),
+                      onChanged: (v) => setState(() => _fotoRuta = v),
                       validator:
-                          (v) =>
-                              (v == null || v.trim().isEmpty)
-                                  ? 'Ingresa la URL de la imagen'
-                                  : null,
+                          (v) => v == null ? 'Selecciona una foto' : null,
                     ),
+                    if (_fotoRuta != null) ...[
+                      const SizedBox(height: 16),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Image.asset(
+                          _fotoRuta!,
+                          height: 180,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 16),
                     TextFormField(
                       controller: _descCtrl,
