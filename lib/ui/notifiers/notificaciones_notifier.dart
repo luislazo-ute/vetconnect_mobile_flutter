@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/errores.dart';
+import '../../domain/entities/notificacion.dart';
 import '../../domain/usecases/marcar_notificacion_leida_uc.dart';
 import '../../domain/usecases/marcar_todas_notificaciones_leidas_uc.dart';
 import '../../domain/usecases/obtener_notificaciones_uc.dart';

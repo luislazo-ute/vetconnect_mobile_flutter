@@ -5,9 +5,9 @@ import '../../../core/errores.dart';
 import '../../../domain/entities/habitacion.dart';
 import '../../../domain/entities/hospitalizacion.dart';
 import '../../../domain/entities/mascota.dart';
+import '../../notifiers/habitaciones_notifier.dart';
 import '../../notifiers/hospitalizaciones_notifier.dart';
 import '../../notifiers/mascotas_notifier.dart';
-import '../../providers/habitacion_providers.dart';
 import '../../providers/hospitalizacion_providers.dart';
 
 class PantallaHospitalizacionFormulario extends ConsumerStatefulWidget {
@@ -96,11 +96,10 @@ class _FormState extends ConsumerState<PantallaHospitalizacionFormulario> {
   Widget build(BuildContext context) {
     final mascotasState = ref.watch(mascotasNotifierProvider);
     final mascotas = mascotasState.mascotas.where((m) => m.isActive).toList();
-    final habitacionesAsync = ref.watch(obtenerHabitacionesUcProvider);
-    final habitaciones = habitacionesAsync.maybeWhen(
-      data: (pagina) => pagina.results.where((h) => h.disponible && h.isActive).toList(),
-      orElse: () => <Habitacion>[],
-    );
+    final habitacionesState = ref.watch(habitacionesNotifierProvider);
+    final habitaciones = habitacionesState.habitaciones
+        .where((h) => h.disponible && h.isActive)
+        .toList();
 
     return Scaffold(
       appBar: AppBar(
