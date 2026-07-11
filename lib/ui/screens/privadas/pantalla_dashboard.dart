@@ -15,7 +15,10 @@ import 'pantalla_historiales.dart';
 import 'pantalla_mascotas.dart';
 import 'pantalla_veterinarios_admin.dart';
 import 'pantalla_categorias.dart';
+import 'pantalla_compras.dart';
+import 'pantalla_facturas.dart';
 import 'pantalla_productos.dart';
+import 'pantalla_proveedores.dart';
 import 'pantalla_servicios_admin.dart';
 import 'pantalla_vacunas.dart';
 import 'pantalla_hospitalizaciones.dart';
@@ -362,6 +365,39 @@ class _TabFacturacion extends ConsumerWidget {
               trailing: const Icon(Icons.chevron_right),
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const PantallaServiciosAdmin()),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.receipt_long_outlined,
+                  color: TemaApp.verdeBosque),
+              title: const Text('Facturas'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaFacturas()),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.local_shipping_outlined,
+                  color: TemaApp.verdeBosque),
+              title: const Text('Proveedores'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaProveedores()),
+              ),
+            ),
+          ),
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.shopping_cart_outlined,
+                  color: TemaApp.verdeBosque),
+              title: const Text('Compras'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const PantallaCompras()),
               ),
             ),
           ),
