@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
-import '../../../domain/entities/rol.dart';
 import '../../../domain/entities/vacuna.dart';
 import '../../notifiers/vacunas_notifier.dart';
 import '../../notifiers/vacunas_state.dart';
@@ -89,7 +88,7 @@ class _PantallaVacunasState extends ConsumerState<PantallaVacunas> {
   @override
   Widget build(BuildContext context) {
     final estado = ref.watch(vacunasNotifierProvider);
-    final esAdmin = ref.watch(rolActualProvider) == Rol.admin;
+    final puedeGestionar = ref.watch(puedeGestionarClinicaProvider);
     final textos = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -109,7 +108,7 @@ class _PantallaVacunasState extends ConsumerState<PantallaVacunas> {
                     'Vacunas',
                     style: textos.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                  if (esAdmin)
+                  if (puedeGestionar)
                     TextButton.icon(
                       onPressed: () => _abrirFormulario(),
                       icon: const Icon(Icons.add),
@@ -131,14 +130,14 @@ class _PantallaVacunasState extends ConsumerState<PantallaVacunas> {
               ),
             ),
             const SizedBox(height: 8),
-            Expanded(child: _construirLista(estado, esAdmin)),
+            Expanded(child: _construirLista(estado, puedeGestionar)),
           ],
         ),
       ),
     );
   }
 
-  Widget _construirLista(VacunasState estado, bool esAdmin) {
+  Widget _construirLista(VacunasState estado, bool puedeGestionar) {
     if (estado.cargando) return const Center(child: CircularProgressIndicator());
 
     if (estado.error != null && estado.vacunas.isEmpty) {
@@ -179,7 +178,7 @@ class _PantallaVacunasState extends ConsumerState<PantallaVacunas> {
             leading: const CircleAvatar(child: Icon(Icons.vaccines_outlined)),
             title: Text(v.nombreVacuna),
             subtitle: Text('${v.mascotaNombre} · ${v.fechaAplicacion}'),
-            trailing: esAdmin
+            trailing: puedeGestionar
                 ? PopupMenuButton<String>(
                     onSelected: (op) {
                       if (op == 'editar') _abrirFormulario(v);

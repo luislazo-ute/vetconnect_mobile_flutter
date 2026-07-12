@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
 import '../../../domain/entities/hospitalizacion.dart';
-import '../../../domain/entities/rol.dart';
 import '../../notifiers/hospitalizaciones_notifier.dart';
 import '../../notifiers/hospitalizaciones_state.dart';
 import '../../providers/hospitalizacion_providers.dart';
@@ -94,7 +93,7 @@ class _PantallaHospitalizacionesState
   @override
   Widget build(BuildContext context) {
     final estado = ref.watch(hospitalizacionesNotifierProvider);
-    final esAdmin = ref.watch(rolActualProvider) == Rol.admin;
+    final puedeGestionar = ref.watch(puedeGestionarClinicaProvider);
     final textos = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -135,14 +134,14 @@ class _PantallaHospitalizacionesState
               ),
             ),
             const SizedBox(height: 8),
-            Expanded(child: _construirLista(estado, esAdmin)),
+            Expanded(child: _construirLista(estado, puedeGestionar)),
           ],
         ),
       ),
     );
   }
 
-  Widget _construirLista(HospitalizacionesState estado, bool esAdmin) {
+  Widget _construirLista(HospitalizacionesState estado, bool puedeGestionar) {
     if (estado.cargando) return const Center(child: CircularProgressIndicator());
 
     if (estado.error != null && estado.hospitalizaciones.isEmpty) {
@@ -196,7 +195,7 @@ class _PantallaHospitalizacionesState
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            trailing: esAdmin
+            trailing: puedeGestionar
                 ? PopupMenuButton<String>(
                     onSelected: (op) {
                       if (op == 'editar') _abrirDetalle(h);

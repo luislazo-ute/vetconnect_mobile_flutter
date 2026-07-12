@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
 import '../../../domain/entities/receta.dart';
-import '../../../domain/entities/rol.dart';
 import '../../notifiers/recetas_notifier.dart';
 import '../../notifiers/recetas_state.dart';
 import '../../providers/receta_providers.dart';
@@ -90,7 +89,7 @@ class _PantallaRecetasState extends ConsumerState<PantallaRecetas> {
   @override
   Widget build(BuildContext context) {
     final estado = ref.watch(recetasNotifierProvider);
-    final esAdmin = ref.watch(rolActualProvider) == Rol.admin;
+    final puedeGestionar = ref.watch(puedeGestionarClinicaProvider);
     final textos = Theme.of(context).textTheme;
 
     return Scaffold(
@@ -110,7 +109,7 @@ class _PantallaRecetasState extends ConsumerState<PantallaRecetas> {
                     'Recetas',
                     style: textos.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                  if (esAdmin)
+                  if (puedeGestionar)
                     TextButton.icon(
                       onPressed: _abrirFormulario,
                       icon: const Icon(Icons.add),
@@ -132,14 +131,14 @@ class _PantallaRecetasState extends ConsumerState<PantallaRecetas> {
               ),
             ),
             const SizedBox(height: 8),
-            Expanded(child: _construirLista(estado, esAdmin)),
+            Expanded(child: _construirLista(estado, puedeGestionar)),
           ],
         ),
       ),
     );
   }
 
-  Widget _construirLista(RecetasState estado, bool esAdmin) {
+  Widget _construirLista(RecetasState estado, bool puedeGestionar) {
     if (estado.cargando) return const Center(child: CircularProgressIndicator());
 
     if (estado.error != null && estado.recetas.isEmpty) {
@@ -180,7 +179,7 @@ class _PantallaRecetasState extends ConsumerState<PantallaRecetas> {
             leading: const CircleAvatar(child: Icon(Icons.medication_outlined)),
             title: Text(r.mascotaNombre),
             subtitle: Text('${r.veterinarioNombre} · ${r.fecha}'),
-            trailing: esAdmin
+            trailing: puedeGestionar
                 ? PopupMenuButton<String>(
                     onSelected: (op) {
                       if (op == 'eliminar') _confirmarEliminar(r);

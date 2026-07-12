@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../domain/entities/rol.dart';
 import '../../../domain/entities/vacuna.dart';
 import '../../providers/rol_provider.dart';
 import 'pantalla_vacuna_formulario.dart';
@@ -12,14 +11,14 @@ class PantallaVacunaDetalle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final esAdmin = ref.watch(rolActualProvider) == Rol.admin;
+    final puedeGestionar = ref.watch(puedeGestionarClinicaProvider);
     final textos = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalle de vacuna'),
         actions: [
-          if (esAdmin)
+          if (puedeGestionar)
             IconButton(
               icon: const Icon(Icons.edit_outlined),
               onPressed: () {

@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/errores.dart';
 import '../../../domain/entities/hospitalizacion.dart';
-import '../../../domain/entities/rol.dart';
 import '../../providers/hospitalizacion_providers.dart';
 import '../../notifiers/hospitalizaciones_notifier.dart';
 import '../../providers/rol_provider.dart';
@@ -17,7 +16,7 @@ class PantallaHospitalizacionDetalle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final esAdmin = ref.watch(rolActualProvider) == Rol.admin;
+    final puedeGestionar = ref.watch(puedeGestionarClinicaProvider);
     final textos = Theme.of(context).textTheme;
     final esHospitalizado = hospitalizacion.activo;
     final colorEstado = esHospitalizado ? Colors.orange : Colors.green;
@@ -67,7 +66,7 @@ class PantallaHospitalizacionDetalle extends ConsumerWidget {
                 ? hospitalizacion.tratamiento!
                 : 'Sin tratamiento registrado',
           ),
-          if (esHospitalizado && esAdmin) ...[
+          if (esHospitalizado && puedeGestionar) ...[
             const SizedBox(height: 24),
             FilledButton.icon(
               onPressed: () => _darAlta(context, ref),
