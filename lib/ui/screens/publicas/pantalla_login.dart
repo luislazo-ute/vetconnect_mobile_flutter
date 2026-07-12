@@ -51,7 +51,7 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
         children: [
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.fromLTRB(24, 28, 24, 44),
+            padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
             decoration: const BoxDecoration(
               color: TemaApp.verdeBosque,
               borderRadius: BorderRadius.only(
@@ -72,25 +72,24 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
                         )
                       : const SizedBox(height: 24),
                 ),
-                const SizedBox(height: 4),
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(14),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.15),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.pets, size: 48, color: Colors.white),
+                  child: const Icon(Icons.pets, size: 38, color: Colors.white),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 const Text(
                   'VetConnect',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 28,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 2),
                 Text(
                   'Bienvenido de vuelta',
                   style: TextStyle(color: Colors.white.withValues(alpha: 0.8)),
@@ -103,7 +102,7 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
                 curve: Curves.easeOut,
               ),
           Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.fromLTRB(24, 18, 24, 10),
             child: Form(
               key: _formKey,
               child: Column(
@@ -138,7 +137,7 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
                         ? 'Ingresa tu contraseña'
                         : null,
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 18),
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
@@ -155,17 +154,18 @@ class _PantallaLoginState extends ConsumerState<PantallaLogin> {
                           : const Text('Entrar'),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 12),
                   Container(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: TemaApp.verdeMedio.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Text(
-                      'Usuarios de prueba:\nadmin1 · doctor1 · cliente1\nClave: VetConnect2026',
+                      'Prueba: admin1 · doctor1 · cliente1  —  VetConnect2026',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                      style: TextStyle(color: Colors.grey, fontSize: 11),
                     ),
                   ),
                 ],

@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Necesario para llamar a la API. Flutter solo lo agrega en debug/profile,
+         asi que en release hay que declararlo aqui o la app se queda sin internet. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
-        android:label="vetconnect_app"
+        android:label="VetConnect"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
