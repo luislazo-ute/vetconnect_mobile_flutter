@@ -267,9 +267,3 @@ Algunas cosas que sabemos que un producto real tendría, y por qué no están:
 - **La galería guarda las fotos en base64 dentro de Mongo.** Funciona y es autocontenido,
   pero en producción lo correcto sería subirlas a un almacenamiento de archivos y guardar
   solo la referencia.
-
----
-
-## Guion del video
-
-Está en [GUION_VIDEO.md](GUION_VIDEO.md).
