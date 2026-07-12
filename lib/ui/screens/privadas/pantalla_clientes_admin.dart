@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/errores.dart';
 import '../../../domain/entities/cliente.dart';
 import '../../providers/cliente_providers.dart';
+import 'pantalla_cliente_formulario.dart';
 
 class PantallaClientesAdmin extends ConsumerWidget {
   const PantallaClientesAdmin({super.key});
@@ -103,7 +104,20 @@ class PantallaClientesAdmin extends ConsumerWidget {
     final async = ref.watch(clientesProvider);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Gestión de clientes')),
+      appBar: AppBar(
+        title: const Text('Gestión de clientes'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            tooltip: 'Nuevo cliente',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const PantallaClienteFormulario(),
+              ),
+            ),
+          ),
+        ],
+      ),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error:

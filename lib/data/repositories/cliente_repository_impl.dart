@@ -39,6 +39,17 @@ class ClienteRepositoryImpl implements IClienteRepository {
   }
 
   @override
+  Future<void> crearCliente(Map<String, dynamic> datos) {
+    final uri = Uri.parse('${Constantes.urlBase}clientes/');
+    return _envolver(() async {
+      final r = await _cliente
+          .post(uri, headers: _headers, body: jsonEncode(datos))
+          .timeout(Constantes.timeout);
+      if (r.statusCode != 201) throw ExcepcionApi(_msg(r));
+    });
+  }
+
+  @override
   Future<void> actualizarCliente(int id, Map<String, dynamic> datos) {
     final uri = Uri.parse('${Constantes.urlBase}clientes/$id/');
     return _envolver(() async {

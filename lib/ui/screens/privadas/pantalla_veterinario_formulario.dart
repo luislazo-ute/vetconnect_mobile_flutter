@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/errores.dart';
 import '../../../domain/entities/veterinario.dart';
 import '../../notifiers/veterinarios_notifier.dart';
+import '../../providers/cliente_providers.dart';
 import '../../providers/veterinario_providers.dart';
 
 class PantallaVeterinarioFormulario extends ConsumerStatefulWidget {
@@ -21,6 +22,9 @@ class _State extends ConsumerState<PantallaVeterinarioFormulario> {
   late final TextEditingController _telefono;
   late final TextEditingController _email;
   late final TextEditingController _horario;
+  final _usuarioCtrl = TextEditingController();
+  final _claveCtrl = TextEditingController();
+  bool _crearCuenta = false;
   bool _guardando = false;
 
   bool get _esEdicion => widget.veterinario != null;
@@ -43,13 +47,15 @@ class _State extends ConsumerState<PantallaVeterinarioFormulario> {
     _telefono.dispose();
     _email.dispose();
     _horario.dispose();
+    _usuarioCtrl.dispose();
+    _claveCtrl.dispose();
     super.dispose();
   }
 
   Future<void> _guardar() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _guardando = true);
-    final datos = {
+    final datos = <String, dynamic>{
       'nombre': _nombre.text.trim(),
       'especialidad': _especialidad.text.trim(),
       'telefono': _telefono.text.trim(),
@@ -58,6 +64,17 @@ class _State extends ConsumerState<PantallaVeterinarioFormulario> {
     };
     final messenger = ScaffoldMessenger.of(context);
     try {
+      // Vincular una cuenta es lo que convierte al veterinario en un
+      // usuario con rol DOCTOR (el backend deriva el rol de ese vinculo).
+      if (!_esEdicion && _crearCuenta) {
+        datos['user'] = await ref.read(crearUsuarioUcProvider)({
+          'username': _usuarioCtrl.text.trim(),
+          'email': _email.text.trim(),
+          'password': _claveCtrl.text,
+          'is_staff': false,
+        });
+      }
+
       if (_esEdicion) {
         await ref.read(actualizarVeterinarioUcProvider)(
           widget.veterinario!.id,
@@ -110,7 +127,52 @@ class _State extends ConsumerState<PantallaVeterinarioFormulario> {
                           : null,
             ),
             _campo(_horario, 'Horario de atención'),
-            const SizedBox(height: 8),
+            if (!_esEdicion) ...[
+              const Divider(height: 28),
+              SwitchListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Crear cuenta de acceso'),
+                subtitle: const Text(
+                  'Le da login y el rol DOCTOR. Sin cuenta, el veterinario solo '
+                  'aparece en el listado del equipo.',
+                  style: TextStyle(fontSize: 12),
+                ),
+                value: _crearCuenta,
+                onChanged: (v) => setState(() => _crearCuenta = v),
+              ),
+              if (_crearCuenta) ...[
+                const SizedBox(height: 12),
+                TextFormField(
+                  controller: _usuarioCtrl,
+                  decoration: const InputDecoration(
+                    labelText: 'Usuario',
+                    prefixIcon: Icon(Icons.person_outline),
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (v) => (v == null || v.trim().isEmpty)
+                      ? 'El usuario es obligatorio'
+                      : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _claveCtrl,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Contraseña',
+                    prefixIcon: Icon(Icons.lock_outline),
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (v) {
+                    if (v == null || v.isEmpty) {
+                      return 'La contraseña es obligatoria';
+                    }
+                    if (v.length < 8) return 'Mínimo 8 caracteres';
+                    return null;
+                  },
+                ),
+              ],
+            ],
+            const SizedBox(height: 20),
             FilledButton(
               onPressed: _guardando ? null : _guardar,
               child:
