@@ -42,37 +42,47 @@ class BottomNavFlotante extends StatelessWidget {
           final activo = i == indiceActual;
           final item = items[i];
 
-          return GestureDetector(
-            onTap: () => alSeleccionar(i),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeInOut,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color:
-                    activo
-                        ? TemaApp.verdeBosque
-                        : TemaApp.verdeBosque.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    item.icono,
-                    size: 22,
-                    color: activo ? Colors.white : TemaApp.verdeBosque,
-                  ),
-                  if (activo) ...[
-                    const SizedBox(width: 8),
-                    Text(
-                      item.etiqueta,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
+          return Flexible(
+            child: GestureDetector(
+              onTap: () => alSeleccionar(i),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                curve: Curves.easeInOut,
+                padding: EdgeInsets.symmetric(
+                  horizontal: activo ? 12 : 8,
+                  vertical: 11,
+                ),
+                decoration: BoxDecoration(
+                  color: activo
+                      ? TemaApp.verdeBosque
+                      : TemaApp.verdeBosque.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      item.icono,
+                      size: 22,
+                      color: activo ? Colors.white : TemaApp.verdeBosque,
                     ),
+                    if (activo) ...[
+                      const SizedBox(width: 6),
+                      Flexible(
+                        child: Text(
+                          item.etiqueta,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: false,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                    ],
                   ],
-                ],
+                ),
               ),
             ),
           );

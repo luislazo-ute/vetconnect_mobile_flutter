@@ -61,7 +61,7 @@ class _PantallaDashboardState extends ConsumerState<PantallaDashboard> {
                   ItemNav(icono: Icons.home_outlined, etiqueta: 'Inicio'),
                   ItemNav(icono: Icons.pets_outlined, etiqueta: 'Pacientes'),
                   ItemNav(icono: Icons.event_outlined, etiqueta: 'Citas'),
-                  ItemNav(icono: Icons.receipt_long_outlined, etiqueta: 'Facturación'),
+                  ItemNav(icono: Icons.receipt_long_outlined, etiqueta: 'Facturas'),
                   ItemNav(icono: Icons.person_outline, etiqueta: 'Perfil'),
                 ],
               ),
