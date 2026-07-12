@@ -16,7 +16,9 @@ class TemaApp {
         primary: verdeBosque,
         secondary: verdeMedio,
       ),
-      scaffoldBackgroundColor: fondo,
+      // Transparente: el fondo (con las huellitas) lo pinta VetConnectApp
+      // detrás de todas las pantallas.
+      scaffoldBackgroundColor: Colors.transparent,
       textTheme: GoogleFonts.outfitTextTheme(),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(shape: const StadiumBorder()),

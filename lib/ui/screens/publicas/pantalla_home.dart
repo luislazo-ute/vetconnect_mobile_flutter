@@ -34,12 +34,24 @@ class PantallaHome extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // El gatito se asoma por encima de la tarjeta, agarrado del borde.
+            // El gatito se esconde DETRÁS de la tarjeta y solo asoma la cabeza.
             Stack(
               clipBehavior: Clip.none,
               children: [
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/gato_curioso.png',
+                      height: 140,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 62),
+                  padding: const EdgeInsets.only(top: 84),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
                     child: Stack(
@@ -77,18 +89,6 @@ class PantallaHome extends StatelessWidget {
                     ),
                   ),
                 ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/gato_curioso.png',
-                      height: 100,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
               ],
             )
                 .animate()
@@ -122,34 +122,50 @@ class PantallaHome extends StatelessWidget {
                 color: TemaApp.verdeMedio.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: Row(
-                children: [
-                  const CircleAvatar(
-                    backgroundColor: TemaApp.verdeBosque,
-                    child: Icon(Icons.pets, color: Colors.white),
-                  ),
-                  const SizedBox(width: 14),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '¿Ya eres cliente?',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          'Inicia sesión para agendar citas y ver tus mascotas.',
-                          style: textos.bodySmall?.copyWith(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  FilledButton(
+              child: LayoutBuilder(
+                builder: (context, restricciones) {
+                  final texto = Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '¿Ya eres cliente?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Inicia sesión para agendar citas y ver tus mascotas.',
+                        style: textos.bodySmall?.copyWith(color: Colors.grey),
+                      ),
+                    ],
+                  );
+                  final boton = FilledButton(
                     onPressed: () => context.pushNamed('login'),
                     child: const Text('Entrar'),
-                  ),
-                ],
+                  );
+
+                  // En pantallas angostas el botón baja para no desbordar.
+                  if (restricciones.maxWidth < 300) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        texto,
+                        const SizedBox(height: 14),
+                        boton,
+                      ],
+                    );
+                  }
+                  return Row(
+                    children: [
+                      const CircleAvatar(
+                        backgroundColor: TemaApp.verdeBosque,
+                        child: Icon(Icons.pets, color: Colors.white),
+                      ),
+                      const SizedBox(width: 14),
+                      Expanded(child: texto),
+                      const SizedBox(width: 8),
+                      boton,
+                    ],
+                  );
+                },
               ),
             ).animate().fadeIn(delay: 300.ms, duration: 400.ms),
           ],
