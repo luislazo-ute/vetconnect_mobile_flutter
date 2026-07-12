@@ -34,19 +34,24 @@ class PantallaHome extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: CustomPaint(painter: FondoHuellas(opacidad: 0.10)),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(24),
-                    decoration: const BoxDecoration(color: TemaApp.verdeBosque),
-                    child: Row(
+            // El gatito se asoma por encima de la tarjeta, agarrado del borde.
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 62),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(24),
+                    child: Stack(
                       children: [
-                        Expanded(
+                        Positioned.fill(
+                          child:
+                              CustomPaint(painter: FondoHuellas(opacidad: 0.10)),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+                          decoration:
+                              const BoxDecoration(color: TemaApp.verdeBosque),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -68,14 +73,27 @@ class PantallaHome extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.pets, color: Colors.white, size: 56),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1, end: 0),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/gato_curioso.png',
+                      height: 100,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ],
+            )
+                .animate()
+                .fadeIn(duration: 400.ms)
+                .slideY(begin: 0.1, end: 0),
             const SizedBox(height: 28),
 
             Text(

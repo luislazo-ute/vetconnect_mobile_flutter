@@ -10,6 +10,11 @@ class PantallaBienvenida extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final alto = MediaQuery.of(context).size.height;
+    // Tamaño responsivo: el perro crece pero nunca desborda la pantalla.
+    final tamPerro = (alto * 0.44).clamp(300.0, 430.0);
+    final tamCirculo = tamPerro * 0.82;
+
     return Scaffold(
       backgroundColor: TemaApp.verdeBosque,
       body: Stack(
@@ -21,15 +26,43 @@ class PantallaBienvenida extends StatelessWidget {
               child: Column(
                 children: [
                   const Spacer(),
-                  Image.asset(
-                    'assets/images/vetconnect_bulldog.png',
-                    height: 340,
-                    fit: BoxFit.contain,
-                  ).animate().fadeIn(duration: 600.ms).scale(
-                        begin: const Offset(0.92, 0.92),
-                        end: const Offset(1, 1),
-                        curve: Curves.easeOut,
-                      ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Círculo blanco con huellitas gris claro (contraste).
+                      Container(
+                        width: tamCirculo,
+                        height: tamCirculo,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                        ),
+                        child: ClipOval(
+                          child: CustomPaint(
+                            painter: FondoHuellas(
+                              color: Colors.grey,
+                              opacidad: 0.22,
+                              cantidad: 10,
+                            ),
+                            size: Size(tamCirculo, tamCirculo),
+                          ),
+                        ),
+                      ).animate().fadeIn(duration: 500.ms).scale(
+                            begin: const Offset(0.85, 0.85),
+                            end: const Offset(1, 1),
+                            curve: Curves.easeOut,
+                          ),
+                      Image.asset(
+                        'assets/images/vetconnect_bulldog.png',
+                        height: tamPerro,
+                        fit: BoxFit.contain,
+                      ).animate().fadeIn(duration: 600.ms).scale(
+                            begin: const Offset(0.92, 0.92),
+                            end: const Offset(1, 1),
+                            curve: Curves.easeOut,
+                          ),
+                    ],
+                  ),
                   const Spacer(),
                   const Text(
                     'Todo lo que tu\nmascota necesita',
