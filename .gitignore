@@ -46,3 +46,4 @@ app.*.map.json
 
 # Notas personales, no van al repo
 GUION_VIDEO.md
+.claude/
