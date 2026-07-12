@@ -51,7 +51,7 @@ class PantallaHome extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 84),
+                  padding: const EdgeInsets.only(top: 120),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(24),
                     child: Stack(
